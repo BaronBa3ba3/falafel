@@ -111,5 +111,17 @@ def main(directories):
 
 
 
+
+#### Saving the Model
+
+    ## Save model using tensorflow.keras
+    # model.save('model.pb')
+    # model.save('model.h5')
+
+    ## Save model using tensorflow
+    # tf.saved_model.save(model, "my_model")
+
+
+
 if __name__ == "__main__":
     main()
