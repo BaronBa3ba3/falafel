@@ -62,7 +62,9 @@ def main():
 		img = mpimg.imread(img_path)
 		plt.imshow(img)
 
-	# plt.show()
+	plt.close('all') # remove to show images
+	
+	plt.show()
 
 
 	return ([train_dir, validation_dir])

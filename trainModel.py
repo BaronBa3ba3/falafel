@@ -1,6 +1,8 @@
 import os
 import warnings
 
+import matplotlib.pyplot as plt
+
 import tensorflow as tf
 from keras import layers
 from keras import Model
@@ -15,34 +17,40 @@ import getDatabase
 
 def main(directories):
 
+#### Declaring Variables
 
     train_dir = directories[0]
     validation_dir = directories[1]
+
+    EPOCHS = 3
+    BATCH_SIZE = 20  # Number of training examples to process before updating our models variables
+    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
     
 
 
 #### Augmenting images
+
     # Add our data-augmentation parameters to ImageDataGenerator
     train_datagen = ImageDataGenerator(rescale = 1./255.,rotation_range = 40, width_shift_range = 0.2, height_shift_range = 0.2, shear_range = 0.2, zoom_range = 0.2, horizontal_flip = True)
 
     # Note that the validation data should not be augmented!
     test_datagen = ImageDataGenerator( rescale = 1.0/255. )
 
-    print("done1")
+
 
 #### Training and Validation Sets
 
     # Flow training images in batches of 20 using train_datagen generator
-    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = 20, class_mode = 'binary', target_size = (224, 224))
+    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE))
 
     # Flow validation images in batches of 20 using test_datagen generator
-    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = 20, class_mode = 'binary', target_size = (224, 224))
+    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE))
 
-    print("done2")
+
 
 #### Loading the Base Model
 
-    base_model = VGG16(input_shape = (224, 224, 3), # Shape of our images
+    base_model = VGG16(input_shape = (IMG_SHAPE, IMG_SHAPE, 3), # Shape of our images
     include_top = False, # Leave out the last fully connected layer
     weights = 'imagenet')
 
@@ -50,7 +58,7 @@ def main(directories):
     for layer in base_model.layers:
         layer.trainable = False
 
-    print("done3")
+
 
 #### Compiling and Fitting the Model
 
@@ -70,8 +78,36 @@ def main(directories):
 
     model.compile(optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.0001), loss = 'binary_crossentropy',metrics = ['acc'])
 
+    print("\nModel Summary:")
+    model.summary()
 
-    inc_history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = 100, epochs = 3)
+    history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = 10, epochs = 3)
+
+
+#### Visualizing results of the training
+
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs_range = range(EPOCHS)
+
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs_range, acc, label='Training Accuracy')
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.legend(loc='lower right')
+    plt.title('Training and Validation Accuracy')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.legend(loc='upper right')
+    plt.title('Training and Validation Loss')
+    # plt.savefig('./foo.png')
+    plt.show()
 
 
 

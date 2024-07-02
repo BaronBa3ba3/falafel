@@ -20,13 +20,13 @@ def main():
     x = 4
 
 
-    print("Getting Database")
+    print("\n\t 1-Getting Database\n")
     directories = getDatabase.main()
 
-    print("Training Model")
+    print("\n\t 2-Training Model\n")
     trainModel.main(directories)
 
-    print("Finished")
+    print("\n\t 3-Finished\n")
 
 
 
