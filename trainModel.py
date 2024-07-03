@@ -2,29 +2,36 @@ import os
 import warnings
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import tensorflow as tf
+# from tensorflow.python.keras import layers
 from keras import layers
 from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.vgg16 import VGG16
 
-import getDatabase
 # from __main__ import *
 
 
 
 
-def main(directories):
+def main(directories, parameters, modelPath):
 
 #### Declaring Variables
 
     train_dir = directories[0]
     validation_dir = directories[1]
 
-    EPOCHS = 3
-    BATCH_SIZE = 20  # Number of training examples to process before updating our models variables
-    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
+    EPOCHS = parameters[0]
+    BATCH_SIZE = parameters[1]
+    IMG_SHAPE  = parameters[2]
+
+
+
+    total_train = sum([len(files) for r, d, files in os.walk(train_dir)]) # Number of Training Images
+
+    n_steps_epoch = int(np.ceil(total_train / float(BATCH_SIZE)))     # Number of Steps per Epoch
     
 
 
@@ -48,40 +55,17 @@ def main(directories):
 
 
 
-#### Loading the Base Model
+#### Loading the Model
 
-    base_model = VGG16(input_shape = (IMG_SHAPE, IMG_SHAPE, 3), # Shape of our images
-    include_top = False, # Leave out the last fully connected layer
-    weights = 'imagenet')
-
-
-    for layer in base_model.layers:
-        layer.trainable = False
+    model = tf.keras.models.load_model(modelPath)
 
 
 
-#### Compiling and Fitting the Model
 
-    # Flatten the output layer to 1 dimension
-    x = layers.Flatten()(base_model.output)
-
-    # Add a fully connected layer with 512 hidden units and ReLU activation
-    x = layers.Dense(512, activation='relu')(x)
-
-    # Add a dropout rate of 0.5
-    x = layers.Dropout(0.5)(x)
-
-    # Add a final sigmoid layer with 1 node for classification output
-    x = layers.Dense(1, activation='sigmoid')(x)
-
-    model = tf.keras.models.Model(base_model.input, x)
-
-    model.compile(optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.0001), loss = 'binary_crossentropy',metrics = ['acc'])
-
-    print("\nModel Summary:")
+    print("\nModel Summary:\n")
     model.summary()
 
-    history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = 10, epochs = 3)
+    history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = n_steps_epoch, epochs = EPOCHS)
 
 
 #### Visualizing results of the training
@@ -107,7 +91,7 @@ def main(directories):
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     # plt.savefig('./foo.png')
-    plt.show()
+    # plt.show()
 
 
 
@@ -120,6 +104,9 @@ def main(directories):
 
     ## Save model using tensorflow
     # tf.saved_model.save(model, "my_model")
+
+
+    model.save(modelPath)
 
 
 

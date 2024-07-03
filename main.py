@@ -2,31 +2,49 @@ import os
 import subprocess
 
 import getDatabase
+import createModel
 import trainModel
 
 
 
 
+
 def main():
-#### Run script using subprocess
 
-    # result = subprocess.run(['python', 'getDatabase.py'], capture_output=True, text=True)
-    # # To capture output
-    # print(result.stdout)
-    # # To handle errors
-    # if result.returncode != 0:
-    #     print(f"Error: {result.stderr}")
+#### Defining Variables
 
-    x = 4
+    EPOCHS = 3
+    BATCH_SIZE = 20  # Number of training examples to process before updating our models variables
+    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
+
+    MODEL_NAME = "model_CatDog"
+
+
+
+    modelPath = "".join(["models/", MODEL_NAME, ".keras"])
+
+#### Calling Functions
 
 
     print("\n\t 1-Getting Database\n")
     directories = getDatabase.main()
 
-    print("\n\t 2-Training Model\n")
-    trainModel.main(directories)
 
-    print("\n\t 3-Finished\n")
+
+    if os.path.isfile(modelPath):
+        print("\n\t 2-Model already Created\n")
+    else:
+        print("\n\t 2-Creating Model\n")
+        createModel.main(IMG_SHAPE, modelPath)
+
+
+
+    print("\n\t 3-Training Model\n")
+    trainModel.main(directories, [EPOCHS, BATCH_SIZE, IMG_SHAPE], modelPath)
+
+
+
+    print("\n\t 4-Finished\n")
 
 
 

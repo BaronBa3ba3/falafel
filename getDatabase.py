@@ -42,8 +42,8 @@ def main():
 	fig = plt.gcf()
 	fig.set_size_inches(ncols*4, nrows*4)
 	pic_index = 100
-	train_cat_fnames = os.listdir( train_cats_dir )
-	train_dog_fnames = os.listdir( train_dogs_dir )
+	train_cat_fnames = os.listdir(train_cats_dir)
+	train_dog_fnames = os.listdir(train_dogs_dir)
 
 
 	next_cat_pix = [os.path.join(train_cats_dir, fname) 
@@ -65,6 +65,30 @@ def main():
 	plt.close('all') # remove to show images
 	
 	plt.show()
+
+
+
+#### Printing numbers of images in each directory
+
+	num_cats_tr = len(os.listdir(train_cats_dir))
+	num_dogs_tr = len(os.listdir(train_dogs_dir))
+
+	num_cats_val = len(os.listdir(validation_cats_dir))
+	num_dogs_val = len(os.listdir(validation_dogs_dir))
+
+	total_train = num_cats_tr + num_dogs_tr
+	total_val = num_cats_val + num_dogs_val
+
+
+	print('total training cat images:', num_cats_tr)
+	print('total training dog images:', num_dogs_tr)
+
+	print('total validation cat images:', num_cats_val)
+	print('total validation dog images:', num_dogs_val)
+
+	print("-----------------------------------------------")
+	print("Total training images:", total_train)
+	print("Total validation images:", total_val)
 
 
 	return ([train_dir, validation_dir])
