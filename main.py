@@ -14,6 +14,8 @@ def main():
 
 #### Defining Variables
 
+    TRAIN_BIN = 0   # 1 if you want to train the model, 0 otherwise
+
     EPOCHS = 3
     BATCH_SIZE = 20  # Number of training examples to process before updating our models variables
     IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
@@ -40,9 +42,11 @@ def main():
         createModel.main(IMG_SHAPE, modelPath)
 
 
-
-    print("\n\t 3-Training Model\n")
-    trainModel.main(directories, [EPOCHS, BATCH_SIZE, IMG_SHAPE], modelPath)
+    if (TRAIN_BIN == 0):
+        print("\n\t 3-Model already trained\n")
+    else:
+        print("\n\t 3-Training Model\n")
+        trainModel.main(directories, [EPOCHS, BATCH_SIZE, IMG_SHAPE], modelPath)
 
 
 
