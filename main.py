@@ -4,6 +4,7 @@ import subprocess
 import getDatabase
 import createModel
 import trainModel
+import predict
 
 
 
@@ -25,7 +26,7 @@ def main():
 
 #### Calling Functions
 
-
+    '''
     print("\n\t 1-Getting Database\n")
     directories = getDatabase.main()
 
@@ -42,9 +43,14 @@ def main():
     print("\n\t 3-Training Model\n")
     trainModel.main(directories, [EPOCHS, BATCH_SIZE, IMG_SHAPE], modelPath)
 
+    '''
+
+    print("\n\t 4-Predicting Images\n")
+    predict.main(modelPath, IMG_SHAPE)
 
 
-    print("\n\t 4-Finished\n")
+
+    print("\n\t 5-Finished\n")
 
 
 
