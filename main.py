@@ -20,15 +20,16 @@ def main():
 
     MODEL_NAME = "model_CatDog"
 
+    DATABASE_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Databases"
+    MODEL_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Models"
 
-
-    modelPath = "".join(["models/", MODEL_NAME, ".keras"])
+    modelPath = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))
 
 #### Calling Functions
 
-    '''
+
     print("\n\t 1-Getting Database\n")
-    directories = getDatabase.main()
+    directories = getDatabase.main(DATABASE_DIR)
 
 
 
@@ -43,7 +44,7 @@ def main():
     print("\n\t 3-Training Model\n")
     trainModel.main(directories, [EPOCHS, BATCH_SIZE, IMG_SHAPE], modelPath)
 
-    '''
+
 
     print("\n\t 4-Predicting Images\n")
     predict.main(modelPath, IMG_SHAPE)

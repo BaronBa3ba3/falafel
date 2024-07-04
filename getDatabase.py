@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 
-def main():
+def main(DATABASE_DIR):
 
 
 	#### Preparing the dataset
@@ -12,11 +12,11 @@ def main():
 	local_zip = 'data/cats_and_dogs_filtered.zip'
 	zip_ref = zipfile.ZipFile(local_zip, 'r')
 	#zip_ref.extractall('/tmp')
-	zip_ref.extractall("C:/Users/bruno/Documents/1_Programming/z-temp")
+	zip_ref.extractall(DATABASE_DIR)
 	zip_ref.close()
 
 	#base_dir = '/tmp/cats_and_dogs_filtered'
-	base_dir = 'C:/Users/bruno/Documents/1_Programming/z-temp/cats_and_dogs_filtered'
+	base_dir = os.path.join(DATABASE_DIR, 'cats_and_dogs_filtered')
 	train_dir = os.path.join(base_dir, 'train')
 	validation_dir = os.path.join(base_dir, 'validation')
 
