@@ -19,7 +19,7 @@ cd ${WORKING_DIRECTORY}
 # Activate virtual environment if you have one
 source ${VENV_DIR}/bin/activate
 # Start Gunicorn
-exec gunicorn --workers 3 --bind 0.0.0.0:8000 falafel.wsgi:create_app()
+exec gunicorn --workers 3 --bind 0.0.0.0:8000 'falafel.wsgi:create_app()'
 EOF
         chmod +x $START_SCRIPT
     else
