@@ -3,7 +3,7 @@ Neuron Network for plant recognition
 
 
 
-# Steps to install application onto Ubuntu Server :
+# Steps to install application onto Ubuntu Server (Server-Side):
 
 1. Create working directory and enter it (suggestion : `/etc/falafel`)
 `mkdir /etc/falafel`
