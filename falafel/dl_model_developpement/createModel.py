@@ -4,13 +4,16 @@ from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.vgg16 import VGG16
 
-
+import constants
 
 
 
 def main(IMG_SHAPE, modelPath):
 
 #### Loading the Base Model
+
+    IMG_SHAPE = constants.IMG_SHAPE
+    modelPath = constants.MODEL_PATH
 
     base_model = VGG16(input_shape = (IMG_SHAPE, IMG_SHAPE, 3), # Shape of our images
     include_top = False, # Leave out the last fully connected layer

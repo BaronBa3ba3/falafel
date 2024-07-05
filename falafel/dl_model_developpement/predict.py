@@ -13,6 +13,8 @@ from keras.applications.vgg16 import VGG16
 from keras.utils import load_img, img_to_array
 from PIL import Image
 
+import constants
+
 
 
 
@@ -49,11 +51,13 @@ def plot_image(i, predictions_array, images):
 
 
 
-def main(modelPath, IMG_SHAPE):
+def main():
 
 #### Declaring variables
 
-    predict_dir = "./data_test"
+    IMG_SHAPE = constants.IMG_SHAPE
+    modelPath = constants.MODEL_DIR
+    predict_dir = constants.PREDICTION_DIR
 
 
 

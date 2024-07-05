@@ -11,21 +11,22 @@ from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.vgg16 import VGG16
 
+import constants
 # from __main__ import *
 
 
 
 
-def main(directories, parameters, modelPath):
+def main():
 
 #### Declaring Variables
 
-    train_dir = directories[0]
-    validation_dir = directories[1]
+    train_dir = constants.TRAIN_DIR
+    validation_dir = constants.VALIDATION_DIR
 
-    EPOCHS = parameters[0]
-    BATCH_SIZE = parameters[1]
-    IMG_SHAPE  = parameters[2]
+    EPOCHS = constants.EPOCHS
+    BATCH_SIZE = constants.BATCH_SIZE  # Number of training examples to process before updating our models variables
+    IMG_SHAPE  = constants.IMG_SHAPE # Our training data consists of images with width of 224 pixels and height of 224 pixels
 
 
 
@@ -57,7 +58,7 @@ def main(directories, parameters, modelPath):
 
 #### Loading the Model
 
-    model = tf.keras.models.load_model(modelPath)
+    model = tf.keras.models.load_model(constants.MODEL_PATH)
 
 
 
@@ -106,7 +107,7 @@ def main(directories, parameters, modelPath):
     # tf.saved_model.save(model, "my_model")
 
 
-    model.save(modelPath)
+    model.save(constants.MODEL_PATH)
 
 
 

@@ -3,22 +3,23 @@ import zipfile
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+import constants
 
-def main(DATABASE_DIR):
 
+def main():
 
+	DATABASE_DIR = constants.DATABASE_DIR
 	#### Preparing the dataset
 
-	local_zip = 'data/cats_and_dogs_filtered.zip'
+	local_zip = constants.DATABASE_DIR_ZIP
 	zip_ref = zipfile.ZipFile(local_zip, 'r')
 	#zip_ref.extractall('/tmp')
 	zip_ref.extractall(DATABASE_DIR)
 	zip_ref.close()
 
 	#base_dir = '/tmp/cats_and_dogs_filtered'
-	base_dir = os.path.join(DATABASE_DIR, 'cats_and_dogs_filtered')
-	train_dir = os.path.join(base_dir, 'train')
-	validation_dir = os.path.join(base_dir, 'validation')
+	train_dir = constants.TRAIN_DIR
+	validation_dir = constants.VALIDATION_DIR
 
 	# Directory with our training cat pictures
 	train_cats_dir = os.path.join(train_dir, 'cats')

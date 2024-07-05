@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+import constants
 import getDatabase
 import createModel
 import trainModel
@@ -14,16 +15,16 @@ def main():
 
 #### Defining Variables
 
-    TRAIN_BIN = 0   # 1 if you want to train the model, 0 otherwise
+    TRAIN_BOOL = constants.TRAIN_BOOL   # 1 if you want to train the model, 0 otherwise
 
-    EPOCHS = 3
-    BATCH_SIZE = 20  # Number of training examples to process before updating our models variables
-    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
+    EPOCHS = constants.EPOCHS
+    BATCH_SIZE = constants.BATCH_SIZE  # Number of training examples to process before updating our models variables
+    IMG_SHAPE  = constants.IMG_SHAPE # Our training data consists of images with width of 224 pixels and height of 224 pixels
 
-    MODEL_NAME = "model_CatDog"
+    MODEL_NAME = constants.MODEL_NAME
 
-    DATABASE_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Databases"
-    MODEL_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Models"
+    DATABASE_DIR = constants.DATABASE_DIR
+    MODEL_DIR = constants.MODEL_DIR
 
     modelPath = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))
 
@@ -31,7 +32,7 @@ def main():
 
 
     print("\n\t 1-Getting Database\n")
-    directories = getDatabase.main(DATABASE_DIR)
+    directories = getDatabase.main()
 
 
 
@@ -42,7 +43,7 @@ def main():
         createModel.main(IMG_SHAPE, modelPath)
 
 
-    if (TRAIN_BIN == 0):
+    if (TRAIN_BOOL == 0):
         print("\n\t 3-Model already trained\n")
     else:
         print("\n\t 3-Training Model\n")
@@ -51,7 +52,7 @@ def main():
 
 
     print("\n\t 4-Predicting Images\n")
-    predict.main(modelPath, IMG_SHAPE)
+    predict.main()
 
 
 
