@@ -56,7 +56,7 @@ def main():
 #### Declaring variables
 
     IMG_SHAPE = constants.IMG_SHAPE
-    modelPath = constants.MODEL_DIR
+    modelPath = constants.MODEL_PATH
     predict_dir = constants.PREDICTION_DIR
 
 
