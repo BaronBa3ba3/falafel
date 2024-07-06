@@ -6,7 +6,7 @@ import constants
 
 
 
-def main(IMG_SHAPE, modelPath):
+def main():
 
 #### Loading the Base Model
 
