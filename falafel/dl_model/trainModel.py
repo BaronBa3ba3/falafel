@@ -29,11 +29,20 @@ def main():
     IMG_SHAPE  = constants.IMG_SHAPE # Our training data consists of images with width of 224 pixels and height of 224 pixels
 
 
-
     total_train = sum([len(files) for r, d, files in os.walk(train_dir)]) # Number of Training Images
 
-    n_steps_epoch = int(np.ceil(total_train / float(BATCH_SIZE)))     # Number of Steps per Epoch
+
+
+    # Number of Steps per Epoch
+    if (constants.N_STEPS_PER_EPOCH == 0):
+        n_steps_epoch = int(np.ceil(total_train / float(BATCH_SIZE)))
+    else:
+        n_steps_epoch = constants.N_STEPS_PER_EPOCH
     
+#### Logging
+
+    log_dir = constants.LOG_DIR
+    os.makedirs(os.path.join(log_dir, 'plots'), exist_ok=True)
 
 
 #### Augmenting images
@@ -91,7 +100,9 @@ def main():
     plt.plot(epochs_range, val_loss, label='Validation Loss')
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
-    # plt.savefig('./foo.png')
+    plt.savefig(os.path.join(log_dir, 'plots', 'Training_Validation_graphs.png'))
+
+    plt.close('all')
     # plt.show()
 
 

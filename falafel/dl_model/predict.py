@@ -54,6 +54,9 @@ def main():
     modelPath = constants.MODEL_PATH
     predict_dir = constants.PREDICTION_DIR
 
+    # Logging
+    log_dir = constants.LOG_DIR
+    os.makedirs(os.path.join(log_dir, 'plots'), exist_ok=True)
 
 
 #### Loading the Model
@@ -93,7 +96,10 @@ def main():
         plt.subplot(nRows, nCols, i+1)
         plot_image(i, predictions, images)
 
-    plt.show()
+    plt.savefig(os.path.join(log_dir, 'plots', 'Predictions.png'))
+
+    plt.close('all')
+    # plt.show()
 
 
 if __name__ == "__main__":

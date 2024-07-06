@@ -11,8 +11,20 @@ services:
   falafel:
     build:
       context: .
+    volumes:
+      - /etc/falafel:/app/config
+
     ports:
       - 8000:8000
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia 
+              capabilities: [gpu]
+    # environment:
+    #   - NVIDIA_VISIBLE_DEVICES=all
+    #   - NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
   nginx:
       image: nginx:latest

@@ -17,12 +17,12 @@ def create_app():
     IMG_SHAPE  = constants.IMG_SHAPE
   
     # modelPath = os.path.join('falafel','dl_model', constants.MODEL_PATH)
-    modelPath = constants.MODEL_PATH_WSL
+    modelPath = constants.MODEL_PATH
 
     # Logging setup
-    log_dir = "logs"
+    log_dir = constants.LOG_DIR
     os.makedirs(log_dir, exist_ok=True)
-    file_handler = RotatingFileHandler(os.path.join(log_dir, 'app.log'), maxBytes=10240, backupCount=10)
+    file_handler = RotatingFileHandler(os.path.join(log_dir, 'falafel_application.log'), maxBytes=10240, backupCount=10)
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
     ))
