@@ -3,6 +3,10 @@
 ### Neuron Network for plant recognition
 
 
+### Architecture 
+
+`Client -> NGINX -> WSGI -> Flask`
+
 
 ### Steps to install application onto Ubuntu Server (Server-Side):
 
