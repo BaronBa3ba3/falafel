@@ -36,9 +36,14 @@ def create_app():
 
     if os.path.isfile(constants.MODEL_PATH):
         print('\nModel Found. Loading Model ...\n')
+        if (constants.TRAIN_BOOL == 1):
+            print('\nTraining Model ...\n')
+            dl_model.main()
     else:
-        print('\nModel not Found. Creating Model ...\n')
+        print('\nModel not Found. Creating and TrainingModel ...\n')
         dl_model.main()
+
+
 
     model = load_model(modelPath)
 

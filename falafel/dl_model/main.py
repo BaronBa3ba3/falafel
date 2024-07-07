@@ -21,7 +21,7 @@ def main():
 #### Defining Variables
 
     # os.chdir(r'falafel/dl_model_developpement')     # Change working directory. Or could have contacate all directories in constants.py with the relative dir : MODEL_DEVELOPPEMENT_DIR + MODEL_DIR
-
+    model_created = 0     # Boolean to check if the model already created.
 
 #### Calling Functions
 
@@ -33,12 +33,14 @@ def main():
 
     if os.path.isfile(constants.MODEL_PATH):
         print("\n\t[2/5] - Model already Created\n")
+        model_created = 1
     else:
         print("\n\t[2/5] - Creating Model\n")
+        model_created = 0
         createModel.main()
 
 
-    if (constants.TRAIN_BOOL == 0):
+    if (constants.TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained, if the model was just created (even though TRAIN_BOOL is 0)
         print("\n\t[3/5] - Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")
@@ -51,7 +53,7 @@ def main():
 
 
 
-    print("\n\t[5/5] - Finished : Model Creation completed\n")
+    print("\n\t[5/5] - Finished : Model Creation and Training completed\n")
 
 
 
