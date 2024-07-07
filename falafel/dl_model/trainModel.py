@@ -8,10 +8,10 @@ import tensorflow as tf
 # from tensorflow.python.keras import layers
 from keras.applications.vgg16 import VGG16
 
-# for Windows :
+# for for TensorFlow < 2.12 (Windows) :
 # from keras.preprocessing.image import ImageDataGenerator
 
-# for WSL : 
+# for TensorFlow => 2.16 (WSL/Linux/Docker) : 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
@@ -46,7 +46,6 @@ def main():
 #### Logging
 
     log_dir = constants.LOG_DIR
-    os.makedirs(os.path.join(log_dir, 'plots'), exist_ok=True)
 
 
 #### Augmenting images

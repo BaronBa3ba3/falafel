@@ -26,11 +26,12 @@ ARG UID=10001
 RUN adduser \
     --disabled-password \
     --gecos "" \
-    --home "/nonexistent" \
+    # --home "/nonexistent" \
+    --home "/home/falafel" \
     --shell "/sbin/nologin" \
-    --no-create-home \
+    # --no-create-home \
     --uid "${UID}" \
-    appuser
+    falafel
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
@@ -40,15 +41,33 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
+#Set up inveronment for Matplotlib
+ENV MPLCONFIGDIR=/path/to/writable/directory
+
+
+# Create logs directory
+# RUN mkdir -p /var/falafel/logs \
+#     mkdir -p /var/falafel/databases
+RUN mkdir -p /var/falafel \
+    && chown -R falafel /var/falafel
+
 # Switch to the non-privileged user to run the application.
-USER appuser
+USER falafel
+
 
 # Copy the source code into the container.
-COPY . .
+COPY config ./config
+COPY falafel ./falafel
+
+
+# Gives access to write 
 
 # Expose the port that the application listens on.
 EXPOSE 8000
 
 # Run the application.
+# CMD ["ls", "-R"]
+# CMD ["python", "--version"]
 CMD ["gunicorn", "--config", "falafel/gunicorn_conf.py"]
-#CMD ["gunicorn", "-c", "falafel/gunicorn_conf.py", "falafel.wsgi:create_app()"]
+# CMD ["gunicorn", "-c", "falafel/gunicorn_conf.py", "falafel.wsgi:create_app()"]
+# CMD [ "python3", "falafel/dl_model/constants.py" ]

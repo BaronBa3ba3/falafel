@@ -11,8 +11,8 @@ services:
   falafel:
     build:
       context: .
-    volumes:
-      - /etc/falafel:/falafel/config
+    # volumes:
+    #   - /etc/falafel:/falafel/config
 
     ports:
       - 8000:8000

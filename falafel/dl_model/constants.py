@@ -8,7 +8,18 @@ import configparser
 config = configparser.ConfigParser()
 
 # Read the configuration file
-config.read('config/falafel.conf')
+config_file_path = 'config/falafel.conf'
+
+config.read(config_file_path)
+
+if config_file_path in config.read(config_file_path):
+    print("SUCCESS : Configuration file '{}' was successfully read.".format(config_file_path))
+else:
+    if os.path.exists(config_file_path):
+        print("ERROR : Configuration file '{}' exists but could not be read. Check permissions.".format(config_file_path))
+    else:
+        print("ERROR : Configuration file '{}' does not exist.".format(config_file_path))
+
 
 
 
@@ -30,14 +41,15 @@ MODEL_NAME = config['Model Parameters']['MODEL_NAME']                           
 
 OS_SYSTEM = config['System']['OS']
 
-if OS_SYSTEM in ('Linux', 'Windows', 'WSL'):
+if OS_SYSTEM in ('Linux', 'Windows', 'WSL', 'Docker'):
     DATABASE_DIR = config[OS_SYSTEM]['DATABASE_DIR']
     MODEL_DIR = config[OS_SYSTEM]['MODEL_DIR']
+    LOG_DIR = config[OS_SYSTEM]['LOG_DIR']
 else:
-    print("System not supported")
+    print("ERROR : System not supported")
 
 
-DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                                # Defines the location of the model developpement folder (relative to the working dir)
+DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                             # Defines the location of the model developpement folder (relative to the working dir)
 PREDICTION_DIR_NAME = "prediction_data"                                             # Defines name of the prediction folder (images to be predicted)
 PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)                 # Defines the location of the prediction folder (images to be predicted)
 ## DATABASE
@@ -57,9 +69,14 @@ VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                      
 MODEL_PATH = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))               # Defines location of the model file
 
 
-## Logging
-LOG_DIR = config['Logging']['LOG_DIR']
 
+
+#### Creating directories
+
+os.makedirs(os.path.join(LOG_DIR, 'plots'), exist_ok=True)
+
+if OS_SYSTEM == "Docker":
+    os.makedirs(DATABASE_DIR, exist_ok=True)
 
 
 
