@@ -9,7 +9,7 @@ import tensorflow as tf
 from keras.applications.vgg16 import VGG16
 
 # for Windows :
-#from keras.preprocessing.image import ImageDataGenerator
+# from keras.preprocessing.image import ImageDataGenerator
 
 # for WSL : 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator

@@ -1,4 +1,10 @@
 flask
 gunicorn
 scipy
+tensorflow[and-cuda]
+numpy
+matplotlib
+pillow
+keras
+
 # Add other dependencies as needed
