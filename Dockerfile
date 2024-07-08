@@ -42,12 +42,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
 #Set up inveronment for Matplotlib
-ENV MPLCONFIGDIR=/path/to/writable/directory
+# ENV MPLCONFIGDIR=/path/to/writable/directory
 
 
 # Create logs directory
-# RUN mkdir -p /var/falafel/logs \
-#     mkdir -p /var/falafel/databases
 RUN mkdir -p /var/falafel \
     && chown -R falafel /var/falafel
 
@@ -67,7 +65,9 @@ EXPOSE 8000
 
 # Run the application.
 # CMD ["ls", "-R"]
+# CMD ["nvidia-smi"]
 # CMD ["python", "--version"]
 CMD ["gunicorn", "--config", "falafel/gunicorn_conf.py"]
 # CMD ["gunicorn", "-c", "falafel/gunicorn_conf.py", "falafel.wsgi:create_app()"]
 # CMD [ "python3", "falafel/dl_model/constants.py" ]
+# CMD [ "python3", "falafel/z-archive/test.py" ]

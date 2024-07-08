@@ -77,6 +77,7 @@ os.makedirs(os.path.join(LOG_DIR, 'plots'), exist_ok=True)
 
 if OS_SYSTEM == "Docker":
     os.makedirs(DATABASE_DIR, exist_ok=True)
+    os.makedirs(MODEL_DIR, exist_ok=True)
 
 
 

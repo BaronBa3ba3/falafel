@@ -47,7 +47,7 @@ def create_app():
 
     model = load_model(modelPath)
 
-    print('\n\Running WSGI Server ...\n')
+    print('\nRunning WSGI Server ...\n')
 
 
 
