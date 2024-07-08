@@ -11,6 +11,7 @@ services:
   falafel:
     build:
       context: .
+    image : ba3ba3/falafel
     # volumes:
       # - /etc/falafel:/falafel/config
       # - /var/lib/falafel:/var/falafel

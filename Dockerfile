@@ -8,7 +8,7 @@
 
 # ARG PYTHON_VERSION=3.10.12
 # FROM python:${PYTHON_VERSION}-slim as base
-FROM python:latest as base
+FROM python:latest AS base
 
 
 # Prevents Python from writing pyc files.
@@ -55,7 +55,7 @@ USER falafel
 
 # Copy the source code into the container.
 COPY config ./config
-COPY falafel ./falafel
+COPY --chown=falafel falafel ./falafel
 
 
 # Gives access to write 
