@@ -35,10 +35,16 @@ def create_app():
 
 
     if os.path.isfile(constants.MODEL_PATH):
-        print('\nModel Found. Loading Model ...\n')
-        if (constants.TRAIN_BOOL == 1):
-            print('\nTraining Model ...\n')
+        if (constants.RST_MODEL_BOOL == 1):
+            print('\nModel Found. Resetting Model ...\n')
+            os.remove(modelPath)
             dl_model.main()
+        elif(constants.TRAIN_BOOL == 1):
+            print('\nModel Found. Training Model ...\n')
+            dl_model.main()
+        else:
+            print('\nModel Found. Loading Model ...\n')
+
     else:
         print('\nModel not Found. Creating and TrainingModel ...\n')
         dl_model.main()
