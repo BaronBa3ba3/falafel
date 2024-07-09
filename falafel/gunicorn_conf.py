@@ -17,6 +17,26 @@ import falafel.dl_model.constants as constants
     #     print('Model not Found. Creating Model ...')
     #     falafel.dl_model.main.main()
 
+def on_starting(server):
+    # if ( (constants.RST_MODEL_BOOL == 1) and (os.path.isfile(constants.MODEL_PATH)) ):       # This code doesnt enter loop, but doesnt load model correctly?
+    #     os.remove(constants.MODEL_PATH)
+    print('Starting Server ...')
+
+def pre_exec(server):
+    server.log.info("Forked child, re-executing.")
+
+def when_ready(server):
+    server.log.info("Server is ready. Spawning workers")
+
+def worker_int(worker):
+    worker.log.info("worker received INT or QUIT signal")
+
+def on_exit(server):
+    print('Exiting Server ...')
+    
+
+
+
 # Server socket
 bind = "0.0.0.0:8000"
 backlog = 2048
@@ -45,6 +65,7 @@ workers = 1
 
 #### Application module
 wsgi_app = 'falafel.wsgi:create_app()'
+
 
 
 
