@@ -30,7 +30,8 @@ def create_app():
     modelPath = constants.MODEL_PATH
 
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
+    MAX_CONTENT_LENGTH = constants.MAX_CONTENT_LENGTH
 
 
 #### Logging setup
@@ -86,8 +87,19 @@ def create_app():
         time.sleep(3)
 
         predictions = model.predict(img_array)
-        # Process predictions as needed
-        return predictions.tolist()
+
+
+        # Convert predictions to a more user-friendly format
+        # This is a placeholder - adjust based on your model's output
+        results = [
+            {"label": f"Class {i}", "probability": float(p)}
+            for i, p in enumerate(predictions[0])
+        ]
+        results.sort(key=lambda x: x['probability'], reverse=True)
+
+        return results[:5]  # Return top 5 predictions
+
+        
 
 
 
@@ -143,18 +155,23 @@ def create_app():
 
     @app.route('/upload', methods=['POST'])
     def upload_file():
-        if 'file' not in request.files:
-            return jsonify({'error': 'No file part'})
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'})
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(filepath)
-            results = analyze_image(filepath)
-            return jsonify({'results': results})
-        return jsonify({'error': 'File type not allowed'})
+        try:
+            if 'file' not in request.files:
+                return jsonify({'error': 'No file part'}), 400
+            file = request.files['file']
+            if file.filename == '':
+                return jsonify({'error': 'No selected file'}), 400
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(constants.UPLOAD_FOLDER, filename)
+                file.save(filepath)
+                app.logger.info(f"File saved to {filepath}")
+                results = analyze_image(filepath)
+                return jsonify({'results': results})
+            return jsonify({'error': 'File type not allowed'}), 400
+        except Exception as e:
+            app.logger.error(f"Error in upload_file: {str(e)}")
+            return jsonify({'error': str(e)}), 500
 
 
 

@@ -35,7 +35,9 @@ BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                    
 IMG_SHAPE  = config.getint('Model Parameters', 'IMG_SHAPE')                         # Our training data consists of images with width of 224 pixels and height of 224 pixels
 N_STEPS_PER_EPOCH = config.getint('Model Parameters', 'N_STEPS_PER_EPOCH')          # Number of steps per epoch. '0' for default value (train_length // batch_size)
 
-MODEL_NAME = config['Model Parameters']['MODEL_NAME']                                          # Defines the name of the model
+MODEL_NAME = config['Model Parameters']['MODEL_NAME']                               # Defines the name of the model
+
+MAX_CONTENT_LENGTH = config.getint('WEBSITE', 'MAX_CONTENT_LENGTH') * 1024 * 1024  # Turning number into MB
 
 
 ## Paths
