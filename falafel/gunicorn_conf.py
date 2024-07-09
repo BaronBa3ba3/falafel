@@ -18,22 +18,22 @@ import falafel.dl_model.constants as constants
     #     falafel.dl_model.main.main()
 
 ## For some reason, this code does not work
-# def on_starting(server):
-#     # if ( (constants.RST_MODEL_BOOL == 1) and (os.path.isfile(constants.MODEL_PATH)) ):       # This code doesnt enter loop, but doesnt load model correctly?
-#     #     os.remove(constants.MODEL_PATH)
-#     print('Starting Server ...')
-#
-# def pre_exec(server):
-#     server.log.info("Forked child, re-executing.")
-#
-# def when_ready(server):
-#     server.log.info("Server is ready. Spawning workers")
-#
-# def worker_int(worker):
-#     worker.log.info("worker received INT or QUIT signal")
-#
-# def on_exit(server):
-#     print('Exiting Server ...')
+def on_starting(server):
+    # if ( (constants.RST_MODEL_BOOL == 1) and (os.path.isfile(constants.MODEL_PATH)) ):       # This code doesnt enter loop, but doesnt load model correctly?
+    #     os.remove(constants.MODEL_PATH)
+    print('Starting Server ...')
+
+def pre_exec(server):
+    server.log.info("Forked child, re-executing.")
+
+def when_ready(server):
+    server.log.info("Server is ready. Spawning workers")
+
+def worker_int(worker):
+    worker.log.info("worker received INT or QUIT signal")
+
+def on_exit(server):
+    print('Exiting Server ...')
     
 
 
@@ -45,6 +45,7 @@ backlog = 2048
 #### Worker processes
 workers = 1
 # workers = multiprocessing.cpu_count() * 2 + 1
+worker_class = "eventlet"
 # worker_class = 'sync'
 # worker_connections = 1000
 timeout = 600
@@ -65,7 +66,7 @@ timeout = 600
 # access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
 #### Application module
-wsgi_app = 'falafel.wsgi:create_app()'
+wsgi_app = 'falafel.wsgi:app'
 
 
 

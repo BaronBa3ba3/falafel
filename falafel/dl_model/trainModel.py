@@ -35,6 +35,10 @@ def main():
 
     total_train = sum([len(files) for r, d, files in os.walk(train_dir)]) # Number of Training Images
 
+    is_training = True
+    total_epochs = EPOCHS
+    current_epoch = 0
+
 
 
     # Number of Steps per Epoch
@@ -61,10 +65,10 @@ def main():
 #### Training and Validation Sets
 
     # Flow training images in batches of 20 using train_datagen generator
-    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE))
+    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='training')
 
     # Flow validation images in batches of 20 using test_datagen generator
-    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE))
+    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='validation')
 
 
 
@@ -79,6 +83,7 @@ def main():
     model.summary()
 
     history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = n_steps_epoch, epochs = EPOCHS)
+
 
 
 #### Visualizing results of the training

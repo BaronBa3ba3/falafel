@@ -48,8 +48,9 @@ def main():
 
 
 
-    print("\n\t[4/5] - Predicting Images\n")
-    predict.main()
+    print("\n\t[4/5] - Skipping Predicting Images\n")
+    # print("\n\t[4/5] - Predicting Images\n")
+    # predict.main()
 
 
 
