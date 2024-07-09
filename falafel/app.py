@@ -1,26 +1,39 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from keras.models import load_model
 import keras.utils as image
 
 from PIL import Image
+from logging.handlers import RotatingFileHandler
+from werkzeug.utils import secure_filename
 import numpy as np
 import io
 import logging
-from logging.handlers import RotatingFileHandler
 import os
+import time
 
 import falafel.dl_model.constants as constants
 import falafel.dl_model.main as dl_model
 
-def create_app():
-    app = Flask(__name__)
 
+
+
+def create_app():
+
+
+
+
+
+    app = Flask(__name__)
+#### Variables Declaration
     IMG_SHAPE  = constants.IMG_SHAPE
   
-    # modelPath = os.path.join('falafel','dl_model', constants.MODEL_PATH)
     modelPath = constants.MODEL_PATH
 
-    # Logging setup
+    UPLOAD_FOLDER = constants.UPLOAD_FOLDER
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+
+#### Logging setup
     log_dir = constants.LOG_DIR
     os.makedirs(log_dir, exist_ok=True)
     file_handler = RotatingFileHandler(os.path.join(log_dir, 'falafel_application.log'), maxBytes=10240, backupCount=10)
@@ -31,8 +44,7 @@ def create_app():
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.DEBUG)
 
-    # Load the model
-    
+#### Load the model
     if os.path.isfile(constants.MODEL_PATH):
         # if (constants.RST_MODEL_BOOL == 1):       # This line enters loop. need to find a way to set another variable (reset_model= 0)
         if (0 == 1):
@@ -51,13 +63,37 @@ def create_app():
         dl_model.main()
 
 
-
     model = load_model(modelPath)
 
     print('\nRunning WSGI Server ...\n')
 
 
 
+
+#### Inner Functions
+
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+    def analyze_image(filepath):
+        img = image.load_img(filepath, target_size=(IMG_SHAPE, IMG_SHAPE))
+        img_array = image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
+        img_array /= 255.
+
+        # Simulate longer processing time
+        time.sleep(3)
+
+        predictions = model.predict(img_array)
+        # Process predictions as needed
+        return predictions.tolist()
+
+
+
+#### Routes
+
+    ## Route for /predict. Used from terminals
     @app.route('/predict', methods=['POST'])
     def predict():
         app.logger.info('Received a request to /predict')
@@ -98,5 +134,28 @@ def create_app():
         except Exception as e:
             app.logger.error(f'Error during prediction: {str(e)}')
             return jsonify({'error': str(e)}), 500
+        
+
+    ## Routs for Graphical Website
+    @app.route('/', methods=['GET'])
+    def index():
+        return render_template('index.html')
+
+    @app.route('/upload', methods=['POST'])
+    def upload_file():
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'})
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'})
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(filepath)
+            results = analyze_image(filepath)
+            return jsonify({'results': results})
+        return jsonify({'error': 'File type not allowed'})
+
+
 
     return app
