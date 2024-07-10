@@ -48,8 +48,6 @@ def main():
 
 #### Removing model_history data
 
-
-    os.remove(os.path.join(constants.MODEL_HISTORY_DIR, 'history.pkl'))
     nFiles = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
 
     try:

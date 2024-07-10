@@ -48,6 +48,7 @@ if OS_SYSTEM in ('Linux', 'Windows', 'WSL', 'Docker'):
     DATABASE_DIR = config[OS_SYSTEM]['DATABASE_DIR']
     MODEL_DIR = config[OS_SYSTEM]['MODEL_DIR']
     LOG_DIR = config[OS_SYSTEM]['LOG_DIR']
+    UPLOAD_FOLDER = config[OS_SYSTEM]['UPLOAD_FOLDER']                               # Defines the name of the folder where uploaded images (from website) are stored
 else:
     print("ERROR : System not supported")
 
@@ -56,7 +57,6 @@ DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                         
 PREDICTION_DIR_NAME = "prediction_data"                                             # Defines name of the prediction folder (images to be predicted)
 PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)                 # Defines the location of the prediction folder (images to be predicted)
 
-UPLOAD_FOLDER = 'uploads'                                                           # Defines the name of the folder where uploaded images (from website) are stored
 
 MODEL_HISTORY_DIR = os.path.join(MODEL_DIR, 'model_history')                        # Defines the location of the model history folder
 # MODEL_HISTORY_PATH = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')                 # Defines the location of the model history file
