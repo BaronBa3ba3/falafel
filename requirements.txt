@@ -7,6 +7,6 @@ numpy
 matplotlib
 pillow
 keras
-eventlet
+plotly
 
 # Add other dependencies as needed

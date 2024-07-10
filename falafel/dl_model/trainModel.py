@@ -3,6 +3,7 @@ import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 
 import tensorflow as tf
 # from tensorflow.python.keras import layers
@@ -27,6 +28,7 @@ def main():
 
     train_dir = constants.TRAIN_DIR
     validation_dir = constants.VALIDATION_DIR
+    history_file = constants.MODEL_HISTORY_PATH
 
     EPOCHS = constants.EPOCHS
     BATCH_SIZE = constants.BATCH_SIZE  # Number of training examples to process before updating our models variables
@@ -76,13 +78,17 @@ def main():
 
     model = tf.keras.models.load_model(constants.MODEL_PATH)
 
-
-    
-
     print("\nModel Summary:\n")
     model.summary()
 
+
+#### Training
+
     history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = n_steps_epoch, epochs = EPOCHS)
+
+    with open(history_file, 'wb') as file_pi:
+        pickle.dump(history.history, file_pi)
+
 
 
 

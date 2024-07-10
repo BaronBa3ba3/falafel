@@ -1,4 +1,4 @@
-2024-07-09 15:45:05,557 ERROR: Exception on /upload [POST] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+2024-07-10 12:17:15,728 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
 Traceback (most recent call last):
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
     response = self.full_dispatch_request()
@@ -8,12 +8,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 154, in upload_file
-    file.save(filepath)
-  File "/home/bruno/.local/lib/python3.10/site-packages/werkzeug/datastructures/file_storage.py", line 125, in save
-    dst = open(dst, "wb")
-FileNotFoundError: [Errno 2] No such file or directory: 'uploads/Dog.jpg'
-2024-07-09 15:45:06,406 ERROR: Exception on /upload [POST] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:15,902 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
 Traceback (most recent call last):
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
     response = self.full_dispatch_request()
@@ -23,12 +21,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 154, in upload_file
-    file.save(filepath)
-  File "/home/bruno/.local/lib/python3.10/site-packages/werkzeug/datastructures/file_storage.py", line 125, in save
-    dst = open(dst, "wb")
-FileNotFoundError: [Errno 2] No such file or directory: 'uploads/Dog.jpg'
-2024-07-09 15:45:07,327 ERROR: Exception on /upload [POST] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:16,133 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
 Traceback (most recent call last):
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
     response = self.full_dispatch_request()
@@ -38,8 +34,97 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 154, in upload_file
-    file.save(filepath)
-  File "/home/bruno/.local/lib/python3.10/site-packages/werkzeug/datastructures/file_storage.py", line 125, in save
-    dst = open(dst, "wb")
-FileNotFoundError: [Errno 2] No such file or directory: 'uploads/Dog.jpg'
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:16,341 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:16,547 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:16,728 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:16,900 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:17,069 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:17,374 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
+2024-07-10 12:17:17,511 ERROR: Exception on /model [GET] [in /home/bruno/.local/lib/python3.10/site-packages/flask/app.py:838]
+Traceback (most recent call last):
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/bruno/.local/lib/python3.10/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/mnt/c/Users/bruno/Documents/1_Programming/Github Projects/falafel/falafel/app.py", line 205, in model_info
+    acc_fig.add_trace(go.Scatter(y=history['accuracy'], name="Train Accuracy"))
+KeyError: 'accuracy'
