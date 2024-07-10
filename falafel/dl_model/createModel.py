@@ -1,3 +1,5 @@
+import os
+
 import tensorflow as tf
 from keras import layers
 from keras.applications.vgg16 import VGG16
@@ -11,6 +13,7 @@ def main():
 #### Loading the Base Model
 
     IMG_SHAPE = constants.IMG_SHAPE
+    MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
     modelPath = constants.MODEL_PATH
 
     base_model = VGG16(input_shape = (IMG_SHAPE, IMG_SHAPE, 3), # Shape of our images
@@ -42,6 +45,22 @@ def main():
     model.compile(optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.0001), loss = 'binary_crossentropy',metrics = ['acc'])
 
 
+
+#### Removing model_history data
+
+
+    os.remove(os.path.join(constants.MODEL_HISTORY_DIR, 'history.pkl'))
+    nFiles = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+
+    try:
+        files = os.listdir(MODEL_HISTORY_DIR)
+        for file in files:
+            file_path = os.path.join(MODEL_HISTORY_DIR, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        print("All files deleted successfully : {} files".format(nFiles))
+    except OSError:
+        print("Error occurred while deleting files.")
 
 #### Saving the Model
 
