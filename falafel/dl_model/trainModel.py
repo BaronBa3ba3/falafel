@@ -35,10 +35,10 @@ def main():
 
     total_train = sum([len(files) for r, d, files in os.walk(train_dir)]) # Number of Training Images
 
+
     is_training = True
     total_epochs = EPOCHS
     current_epoch = 0
-
 
 
     # Number of Steps per Epoch
@@ -61,15 +61,15 @@ def main():
     test_datagen = ImageDataGenerator( rescale = 1.0/255. )
 
 
-
 #### Training and Validation Sets
 
     # Flow training images in batches of 20 using train_datagen generator
-    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='training')
+    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE)) #, subset='training')
+
 
     # Flow validation images in batches of 20 using test_datagen generator
-    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='validation')
-
+    # subset='validation' is used if splittitng train and val from ImageDataGenerator function
+    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE)) #, subset='validation')
 
 
 #### Loading the Model
@@ -77,7 +77,7 @@ def main():
     model = tf.keras.models.load_model(constants.MODEL_PATH)
 
 
-
+    
 
     print("\nModel Summary:\n")
     model.summary()
