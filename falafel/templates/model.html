@@ -21,14 +21,22 @@
     
     <h2>Training History</h2>
     <div id="accuracyPlot" class="plot"></div>
+    <div id="val_accuracyPlot" class="plot"></div>
     <div id="lossPlot" class="plot"></div>
+    <div id="val_lossPlot" class="plot"></div>
 
     <script>
         var accData = JSON.parse('{{ acc_plot | safe }}');
         Plotly.newPlot('accuracyPlot', accData.data, accData.layout);
 
+        var accData = JSON.parse('{{ val_acc_plot | safe }}');
+        Plotly.newPlot('val_accuracyPlot', accData.data, accData.layout);
+
         var lossData = JSON.parse('{{ loss_plot | safe }}');
         Plotly.newPlot('lossPlot', lossData.data, lossData.layout);
+
+        var accData = JSON.parse('{{ val_loss_plot | safe }}');
+        Plotly.newPlot('val_lossPlot', accData.data, accData.layout);
     </script>
 </body>
 </html>
