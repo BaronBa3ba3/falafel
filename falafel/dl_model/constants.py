@@ -59,7 +59,7 @@ PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)             
 UPLOAD_FOLDER = 'uploads'                                                           # Defines the name of the folder where uploaded images (from website) are stored
 
 MODEL_HISTORY_DIR = os.path.join(MODEL_DIR, 'model_history')                        # Defines the location of the model history folder
-MODEL_HISTORY_PATH = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')                 # Defines the location of the model history file
+# MODEL_HISTORY_PATH = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')                 # Defines the location of the model history file
 
 ## DATABASE
 

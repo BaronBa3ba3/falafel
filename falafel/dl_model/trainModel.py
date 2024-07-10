@@ -28,7 +28,7 @@ def main():
 
     train_dir = constants.TRAIN_DIR
     validation_dir = constants.VALIDATION_DIR
-    history_file = constants.MODEL_HISTORY_PATH
+    MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
 
     EPOCHS = constants.EPOCHS
     BATCH_SIZE = constants.BATCH_SIZE  # Number of training examples to process before updating our models variables
@@ -85,6 +85,12 @@ def main():
 #### Training
 
     history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = n_steps_epoch, epochs = EPOCHS)
+
+
+    nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+    history_file = os.path.join(MODEL_HISTORY_DIR, "".join(['history', str(nHistories), '.pkl']))
+    # history_file = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')
+
 
     with open(history_file, 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
