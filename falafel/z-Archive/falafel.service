@@ -1,0 +1,22 @@
+# This file location should be : /etc/systemd/system/falafel.Service
+# allows to create a systemd service file for the application
+# 
+# first, reload Systemd : sudo systemctl daemon-reload
+# Second, you can enable service : sudo systemctl start falafel
+
+
+
+[Unit]
+   Description=Gunicorn instance to serve flask application
+   After=network.target
+
+   [Service]
+   User=bruno
+   Group=www-data
+   WorkingDirectory=/path/to/your/app
+   Environment="PATH=/path/to/your/venv/bin"
+   ExecStart=/path/to/your/venv/bin/gunicorn --workers 3 --bind unix:flask_app.sock -m 007 app:create_app()
+
+   [Install]
+   WantedBy=multi-user.target
+   
