@@ -1,0 +1,42 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keras Model Visualizer</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2 { color: #333; }
+        pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .plot { width: 100%; height: 500px; }
+    </style>
+</head>
+<body>
+    <h1>Keras Model Visualizer</h1>
+    
+    <h2>Model Summary</h2>
+    <pre>{{ model_summary }}</pre>
+    
+    <h2>Training History</h2>
+    <div id="accuracyPlot" class="plot"></div>
+    <div id="val_accuracyPlot" class="plot"></div>
+    <div id="lossPlot" class="plot"></div>
+    <div id="val_lossPlot" class="plot"></div>
+
+    <script>
+        var accData = JSON.parse('{{ acc_plot | safe }}');
+        Plotly.newPlot('accuracyPlot', accData.data, accData.layout);
+
+        var accData = JSON.parse('{{ val_acc_plot | safe }}');
+        Plotly.newPlot('val_accuracyPlot', accData.data, accData.layout);
+
+        var lossData = JSON.parse('{{ loss_plot | safe }}');
+        Plotly.newPlot('lossPlot', lossData.data, lossData.layout);
+
+        var accData = JSON.parse('{{ val_loss_plot | safe }}');
+        Plotly.newPlot('val_lossPlot', accData.data, accData.layout);
+    </script>
+</body>
+</html>

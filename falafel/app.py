@@ -5,9 +5,13 @@ import keras.utils as image
 from PIL import Image
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
-import numpy as np
 import io
+import json
 import logging
+import numpy as np
+import pickle
+import plotly
+import plotly.graph_objs as go
 import os
 import time
 
@@ -29,9 +33,20 @@ def create_app():
   
     modelPath = constants.MODEL_PATH
 
+    MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
+
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
     MAX_CONTENT_LENGTH = constants.MAX_CONTENT_LENGTH
+    MAX_TRAIN_RUN = constants.MAX_TRAIN_RUN
+    TRAIN_BOOL = constants.TRAIN_BOOL
+
+    valueDict = {
+        "acc": ["Training Accuracy", "Accuracy"],
+        "val_acc": ["Validation Accuracy", "Accuracy"],
+        "loss": ["Training Loss", "Loss"],
+        "val_loss": ["Validation Loss", "Loss"],
+    }
 
 
 #### Logging setup
@@ -46,16 +61,20 @@ def create_app():
     app.logger.setLevel(logging.DEBUG)
 
 #### Load the model
-    if os.path.isfile(constants.MODEL_PATH):
+    if os.path.isfile(modelPath):
+        nRuns = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])     # Number of runs the model has been trained
         # if (constants.RST_MODEL_BOOL == 1):       # This line enters loop. need to find a way to set another variable (reset_model= 0)
         if (0 == 1):
             print('\nModel Found. Resetting Model ...\n')
             os.remove(modelPath)
             dl_model.main()
 
-        elif(constants.TRAIN_BOOL == 1):
-            print('\nModel Found. Training Model ...\n')
-            dl_model.main()
+        elif(TRAIN_BOOL == 1):
+            if (nRuns <= MAX_TRAIN_RUN) or (MAX_TRAIN_RUN == 0):
+                print('\nModel Found. Training Model ...\n')
+                dl_model.main()
+            else:
+                print('\nModel Found. Max Train Run reached. Skipping Training ...\n')
         else:
             print('\nModel Found. Loading Model ...\n')
 
@@ -87,12 +106,18 @@ def create_app():
         time.sleep(3)
 
         predictions = model.predict(img_array)
+        classLabels = 'Dog' if predictions[0][0] > 0.5 else 'Cat'
+        percentage = predictions[0][0] if (classLabels == 'Dog') else 1 - predictions[0][0]
 
-
-        # Convert predictions to a more user-friendly format
-        # This is a placeholder - adjust based on your model's output
+        ## Convert predictions to a more user-friendly format
+        ## This is a placeholder - adjust based on your model's output
+        # classLabels = ["Dog", "Cat"]
+        # results = [
+        #     {"label": f"{classLabels[i]}", "probability": float(p)}
+        #     for i, p in enumerate(predictions[0])
+        # ]
         results = [
-            {"label": f"Class {i}", "probability": float(p)}
+            {"label": f"{classLabels}", "probability": float(percentage)}
             for i, p in enumerate(predictions[0])
         ]
         results.sort(key=lambda x: x['probability'], reverse=True)
@@ -100,6 +125,43 @@ def create_app():
         return results[:5]  # Return top 5 predictions
 
         
+    def plot_history(history_array, value):
+
+        fig = go.Figure()
+
+        epoch_offset = 0
+        for i, history_i in enumerate(history_array):
+            epochs = list(range(epoch_offset, epoch_offset + len(history_i[value])))
+            # acc_fig.add_trace(go.Scatter(x=epochs, y=history_i['acc'], mode='lines+markers', name=f'Run {i+1}'))
+            # epoch_offset += len(history_i['acc'])
+            if i > 0:
+                # Connect the last point of the previous run to the first point of the current run
+                fig.add_trace(go.Scatter(
+                    x=[epoch_offset - 1, epoch_offset],
+                    y=[history_array[i-1][value][-1], history_i[value][0]],
+                    mode='lines',
+                    line=dict(color='gray', dash='dot'),
+                    showlegend=False
+                ))
+
+            fig.add_trace(go.Scatter(
+                x=epochs,
+                y=history_i[value],
+                mode='lines+markers',
+                name=f'Run {i+1}'
+            ))
+
+            epoch_offset += len(history_i[value])
+
+                    # Update layout
+        fig.update_layout(
+            title="".join([valueDict[value][0], " for Multiple Runs"]),
+            xaxis_title='Epoch',
+            yaxis_title=valueDict[value][1],
+            legend_title='Runs'
+        )
+
+        return fig
 
 
 
@@ -163,7 +225,7 @@ def create_app():
                 return jsonify({'error': 'No selected file'}), 400
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                filepath = os.path.join(constants.UPLOAD_FOLDER, filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
                 app.logger.info(f"File saved to {filepath}")
                 results = analyze_image(filepath)
@@ -173,6 +235,40 @@ def create_app():
             app.logger.error(f"Error in upload_file: {str(e)}")
             return jsonify({'error': str(e)}), 500
 
+
+    ## Rout for model information
+    @app.route('/model')
+    def model_info():
+        # Get model summary
+        model_summary = []
+        model.summary(print_fn=lambda x: model_summary.append(x))
+        model_summary = '\n'.join(model_summary)
+
+        # Import Model history
+        nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+        history_file_names = (os.listdir(MODEL_HISTORY_DIR))
+        history_array = []
+        for i in range(nHistories):
+            history_file = os.path.join(MODEL_HISTORY_DIR, history_file_names[i])
+            with open(history_file, "rb") as file_pi:
+                history_array.append(pickle.load(file_pi))
+
+
+        # Create accuracy plots
+        acc_fig = plot_history(history_array, 'acc')
+        acc_plot = json.dumps(acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        val_acc_fig = plot_history(history_array, 'val_acc')
+        val_acc_plot = json.dumps(val_acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        # Create loss plots
+        loss_fig = plot_history(history_array, 'loss')
+        loss_plot = json.dumps(loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        val_loss_fig = plot_history(history_array, 'val_loss')
+        val_loss_plot = json.dumps(val_loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template('model.html', model_summary=model_summary, acc_plot=acc_plot, val_acc_plot=val_acc_plot, loss_plot=loss_plot, val_loss_plot=val_loss_plot)
 
 
     return app
