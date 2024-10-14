@@ -27,6 +27,39 @@ def load_and_preprocess_image_PIL(image_path, IMG_SHAPE):
     return img_array
 
 
+def prediction_analysis_singleCLass(predictions, CLASS_LABELS):
+    predicted_classes_index = np.argmax(predictions, axis=1)
+    
+    predicted_classes = [CLASS_LABELS[i] for i in predicted_classes_index]
+    predicted_values = [predictions[i][predicted_classes_index[i]] for i in range(predicted_classes_index.shape[0])]
+
+    return [predicted_classes, predicted_values]
+
+
+
+def prediction_analysis_doubleCLass(predictions, CLASS_LABELS):
+    
+    top_2_indices = np.argsort(predictions, axis=1)[:, -2:]  # Get the last two indices in sorted order
+
+    # Create a list to store the top 2 predicted classes and their probabilities
+    top_2_classes_with_probs = []
+
+    # Iterate over each prediction and extract the class labels and probabilities
+    for i, indices in enumerate(top_2_indices):
+        
+        indices = reversed(indices) # Reverse indices to have the highest probability first
+        
+        # For each index, get the corresponding class label and probability percentage
+        top_2_classes_probs = [(CLASS_LABELS[idx], predictions[i][idx]) for idx in indices]
+        
+        top_2_classes_with_probs.append(top_2_classes_probs)
+
+
+    # 3 dimension array :       top_2_classes_with_probs = [image1, image2, image3, ...]
+    #                           top_2_classes_with_probs[0] = [[class1, prob1], [class2, prob2]]
+    return top_2_classes_with_probs
+
+
 
 def plot_image(i, predicted_percentage, predicted_class, image):
   plt.grid(False)
@@ -69,43 +102,27 @@ def main():
 #### Prediction (most likely class)
 
     predictions = model.predict(images)
-    print(predictions)
+    print("\nprediction_raw : \n{}".format(predictions))
 
-    predicted_classes_index = np.argmax(predictions, axis=1)
+    
+    prediction_single = prediction_analysis_singleCLass(predictions, CLASS_LABELS)
 
-    predicted_classes = [CLASS_LABELS[i] for i in predicted_classes_index]
-    predicted_values = [predictions[i][predicted_classes_index[i]] for i in range(images.shape[0])]
-    # predicted_values = [predictions[predicted_classes_index[i]] for i in range(5)]
+    print("\npredicted_classes : \n\t{}".format(prediction_single[0]))
+    print("predicted_values : \n\t{}".format(prediction_single[1]))
 
-    print(predicted_classes)
-    print(predicted_values)
 
 
 #### Prediction (2 most likely classes)
 
-    top_2_indices = np.argsort(predictions, axis=1)[:, -2:]  # Get the last two indices in sorted order
-
-    # Create a list to store the top 2 predicted classes and their probabilities
-    # 3 dimension array :       top_2_classes_with_probs = [image1, image2, image3, ...]
-    #                           top_2_classes_with_probs[0] = [[class1, prob1], [class2, prob2]]
-    top_2_classes_with_probs = []
-
-    # Iterate over each prediction and extract the class labels and probabilities
-    for i, indices in enumerate(top_2_indices):
-        
-        indices = reversed(indices) # Reverse indices to have the highest probability first
-        
-        # For each index, get the corresponding class label and probability percentage
-        top_2_classes_probs = [(CLASS_LABELS[idx], predictions[i][idx]) for idx in indices]
-        
-        top_2_classes_with_probs.append(top_2_classes_probs)
-
+    prediction_double = prediction_analysis_doubleCLass(predictions, CLASS_LABELS)
 
     # Output the top 2 predicted classes and their probabilities for each image
-    for i, classes_probs in enumerate(top_2_classes_with_probs):
+    print("\n")
+    for i, classes_probs in enumerate(prediction_double):
         print(f"Image {i+1}:")
         for class_label, prob in classes_probs:
             print(f"  Class: {class_label}, Probability: {prob:.2f}%")
+
 
 
 #### Plotting the Predictions
@@ -119,7 +136,7 @@ def main():
     
     for i in range(len(images)) :
         plt.subplot(nRows, nCols, i+1)
-        plot_image(i, predicted_values[i], predicted_classes[i], images[i])
+        plot_image(i, prediction_single[1][i], prediction_single[0][i], images[i])
 
     plt.savefig(os.path.join(log_dir, 'plots', 'Predictions.png'))
 
