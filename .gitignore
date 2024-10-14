@@ -1,5 +1,7 @@
 # Database
-falafel\dl_model\data\flowers_5.zip
+falafel/dl_model/data/*
+!falafel/dl_model/data/flowers_5_trim.zip
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
