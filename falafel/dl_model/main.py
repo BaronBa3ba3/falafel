@@ -27,8 +27,8 @@ def main():
     TRAIN_BOOL = constants.TRAIN_BOOL
     PREDICT_BOOL = 0
 
-    GET_DATABASE = 0
-    TRAIN_BOOL = 0
+    # GET_DATABASE = 0
+    # TRAIN_BOOL = 0
 
 #### Calling Functions
 
@@ -57,7 +57,7 @@ def main():
         trainModel.main()
 
 
-    if (PREDICT_BOOL == 0):                             # Does not unzips database if GET_DATABASE == 0
+    if (PREDICT_BOOL == 0):
         print("\n\t[4/5] - Skipping Predicting Images\n")
     else:
         print("\n\t[4/5] - Predicting Images\n")

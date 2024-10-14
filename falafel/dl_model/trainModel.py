@@ -3,7 +3,11 @@ import warnings
 import time
 
 import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
 import numpy as np
+import pandas as pd
 import pickle
 
 import tensorflow as tf
@@ -44,7 +48,7 @@ def main():
 	BATCH_SIZE = constants.BATCH_SIZE  	# Number of training examples to process before updating our models variables
 	IMG_SHAPE  = constants.IMG_SHAPE 	# Our training data consists of images with width of 224 pixels and height of 224 pixels
 	VAL_SPLIT = constants.VAL_SPLIT
-
+	CLASS_LABELS = constants.CLASS_LABELS
 	
 
 
@@ -166,6 +170,63 @@ def main():
 
 	plt.close('all')
 	# plt.show()
+
+
+#### Confusion Matrix
+
+	## Calculating
+	# Method 1
+	x_val = []
+	y_val = []
+
+	for images, labels in val_dataset:
+		x_val.append(images.numpy())
+		y_val.append(labels.numpy())
+
+	x_val = np.concatenate(x_val, axis=0)
+	y_val = np.concatenate(y_val, axis=0)
+
+	# Get predictions
+	y_pred = model.predict(x_val)
+
+	# Convert to class indices
+	y_pred = np.argmax(y_pred, axis=1)
+	y_true = np.argmax(y_val, axis=1)
+
+	# Create confusion matrix
+	cm = confusion_matrix(y_true, y_pred)
+
+
+	# Method 2
+	# y_pred = []
+	# y_true = []
+
+	# for images, labels in val_dataset:
+	# 	predictions = model.predict(images)
+	# 	y_pred.extend(np.argmax(predictions, axis=1))
+	# 	y_true.extend(np.argmax(labels, axis=1))
+
+	# # Convert to numpy arrays
+	# y_pred = np.array(y_pred)
+	# y_true = np.array(y_true)
+
+	# cm = confusion_matrix(y_true, y_pred)
+
+
+	## Plotting
+	cm = pd.DataFrame(cm , index = CLASS_LABELS , columns = CLASS_LABELS)
+
+	plt.figure(figsize = (10,10))
+	sns.heatmap(cm,cmap= "Blues", linecolor = 'black' , linewidth = 1 , annot = True, fmt='' , xticklabels = CLASS_LABELS , yticklabels = CLASS_LABELS)
+	plt.xlabel('Predicted')
+	plt.ylabel('True')
+
+	plt.savefig(os.path.join(LOG_DIR, 'plots', 'Confusion_Matrix.png'))
+	plt.close('all')
+	plt.show()
+
+	# print(cm)
+
 
 
 
