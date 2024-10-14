@@ -2,6 +2,18 @@ import os
 import configparser
 
 
+# Fonction to determine classes
+def get_subfolder_names(directory):
+    subfolder_names = []
+    for item in os.listdir(directory):
+        item_path = os.path.join(directory, item)
+        if os.path.isdir(item_path):
+            subfolder_names.append(item)
+    return subfolder_names
+
+
+
+
 #### Importing .conf file
 
 # Create a ConfigParser object
@@ -76,6 +88,8 @@ VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                      
 
 GET_DATABASE = config.getboolean('Database', 'GET_DATABASE')
 N_CLASSES = config.getint('Database', 'N_CLASSES')                                  # Number of classes (plants in Database)        
+
+CLASS_LABELS = get_subfolder_names(BASE_DATA_DIR)                                   # List of classes (labels)
 
 ## MODEL
 

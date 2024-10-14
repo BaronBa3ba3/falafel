@@ -25,15 +25,16 @@ def main():
 
     GET_DATABASE = constants.GET_DATABASE
     TRAIN_BOOL = constants.TRAIN_BOOL
+    PREDICT_BOOL = 0
 
-    GET_DATABASE = 1
-    TRAIN_BOOL = 1
+    GET_DATABASE = 0
+    TRAIN_BOOL = 0
 
 #### Calling Functions
 
 
     if (GET_DATABASE == 0):                             # Does not unzips database if GET_DATABASE == 0
-        print("\n\t[1/5] - SkippingGetting Database\n")
+        print("\n\t[1/5] - Skipping Getting Database\n")
     else:
         print("\n\t[1/5] - Getting Database\n")
         getDatabase.main()
@@ -41,7 +42,7 @@ def main():
 
 
     if os.path.isfile(constants.MODEL_PATH):
-        print("\n\t[2/5] - Model already Created\n")
+        print("\n\t[2/5] - Skipping Creating Model. Model already Created\n")
         model_created = 1
     else:
         print("\n\t[2/5] - Creating Model\n")
@@ -50,16 +51,17 @@ def main():
 
 
     if (TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
-        print("\n\t[3/5] - Model already trained\n")
+        print("\n\t[3/5] - Skipping Training Model.Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")
         trainModel.main()
 
 
-
-    print("\n\t[4/5] - Skipping Predicting Images\n")
-    # print("\n\t[4/5] - Predicting Images\n")
-    # predict.main()
+    if (PREDICT_BOOL == 0):                             # Does not unzips database if GET_DATABASE == 0
+        print("\n\t[4/5] - Skipping Predicting Images\n")
+    else:
+        print("\n\t[4/5] - Predicting Images\n")
+        predict.main()
 
 
 

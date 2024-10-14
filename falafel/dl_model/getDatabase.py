@@ -7,12 +7,12 @@ import constants
 
 
 def get_subfolder_names(directory):
-    subfolder_names = []
-    for item in os.listdir(directory):
-        item_path = os.path.join(directory, item)
-        if os.path.isdir(item_path):
-            subfolder_names.append(item)
-    return subfolder_names
+	subfolder_names = []
+	for item in os.listdir(directory):
+		item_path = os.path.join(directory, item)
+		if os.path.isdir(item_path):
+			subfolder_names.append(item)
+	return subfolder_names
 
 
 
@@ -20,8 +20,7 @@ def main():
 
 	DATABASE_DIR = constants.DATABASE_DIR
 	BASE_DATA_DIR = constants.BASE_DATA_DIR
-
-	
+	classes = constants.CLASS_LABELS
 
 #### Preparing the dataset
 
@@ -36,7 +35,6 @@ def main():
 
 #### Printing numbers of images in each directory
 
-	classes = get_subfolder_names(BASE_DATA_DIR)
 	numImages = [] 									# Number of images in each class
 
 	for flower_type in classes:
@@ -62,4 +60,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+	main()
