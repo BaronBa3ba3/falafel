@@ -27,6 +27,7 @@ def load_and_preprocess_image_PIL(image_path, IMG_SHAPE):
     return img_array
 
 
+# 'predictions' argument is expected to be an array. This function analyses multiple predictions of multiple images
 def prediction_analysis_singleCLass(predictions, CLASS_LABELS):
     predicted_classes_index = np.argmax(predictions, axis=1)
     
@@ -36,7 +37,7 @@ def prediction_analysis_singleCLass(predictions, CLASS_LABELS):
     return [predicted_classes, predicted_values]
 
 
-
+# 'predictions' argument is expected to be an array. This function analyses multiple predictions of multiple images
 def prediction_analysis_doubleCLass(predictions, CLASS_LABELS):
     
     top_2_indices = np.argsort(predictions, axis=1)[:, -2:]  # Get the last two indices in sorted order
