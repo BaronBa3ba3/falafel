@@ -26,7 +26,7 @@ def main():
     GET_DATABASE = constants.GET_DATABASE
     TRAIN_BOOL = constants.TRAIN_BOOL
 
-    GET_DATABASE = 0
+    GET_DATABASE = 1
     TRAIN_BOOL = 1
 
 #### Calling Functions
