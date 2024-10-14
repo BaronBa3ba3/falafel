@@ -12,9 +12,11 @@ def main():
 
 #### Loading the Base Model
 
+    N_CLASSES = constants.N_CLASSES
     IMG_SHAPE = constants.IMG_SHAPE
     MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
     modelPath = constants.MODEL_PATH
+    
 
     base_model = VGG16(input_shape = (IMG_SHAPE, IMG_SHAPE, 3), # Shape of our images
     include_top = False, # Leave out the last fully connected layer
@@ -37,8 +39,8 @@ def main():
     # Add a dropout rate of 0.5
     x = layers.Dropout(0.5)(x)
 
-    # Add a final sigmoid layer with 1 node for classification output
-    x = layers.Dense(1, activation='sigmoid')(x)
+    # Add a final sigmoid layer with N_CLASSES nodes for classification output
+    x = layers.Dense(N_CLASSES, activation='softmax')(x)
 
     model = tf.keras.models.Model(base_model.input, x)
 
@@ -61,7 +63,6 @@ def main():
         print("Error occurred while deleting files.")
 
 #### Saving the Model
-
 
     model.save(modelPath)
 

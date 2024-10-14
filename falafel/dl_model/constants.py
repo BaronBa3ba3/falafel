@@ -29,12 +29,13 @@ else:
 
 TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_MODEL_BOOL')              # '1' if you want to train the model, '0' otherwise
 RST_MODEL_BOOL = config.getboolean('Model Parameters', 'RST_MODEL_BOOL')            # '1' if you want to reset the model, '0' otherwise
-MAX_TRAIN_RUN = config.getint('Model Parameters', 'MAX_TRAIN_RUN')              # Maximum number of runs the model will go through. '0' for unlimited.
+MAX_TRAIN_RUN = config.getint('Model Parameters', 'MAX_TRAIN_RUN')                  # Maximum number of runs the model will go through. '0' for unlimited.
 
 EPOCHS = config.getint('Model Parameters', 'EPOCHS')
 BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                        # Number of training examples to process before updating our models variables
 IMG_SHAPE  = config.getint('Model Parameters', 'IMG_SHAPE')                         # Our training data consists of images with width of 224 pixels and height of 224 pixels
 N_STEPS_PER_EPOCH = config.getint('Model Parameters', 'N_STEPS_PER_EPOCH')          # Number of steps per epoch. '0' for default value (train_length // batch_size)
+VAL_SPLIT = config.getfloat('Model Parameters', 'VAL_SPLIT')                        # Ratio of images to be reserved for validation (0.15 = 15%)
 
 MODEL_NAME = config['Model Parameters']['MODEL_NAME']                               # Defines the name of the model
 
@@ -73,11 +74,12 @@ BASE_DATA_DIR = os.path.join(DATABASE_DIR, DATABASE_MAME)                       
 TRAIN_DIR = os.path.join(BASE_DATA_DIR, 'train')                                    # Defines the location of the training folder (training data)
 VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                          # Defines the location of the validation folder (validation data)
 
+GET_DATABASE = config.getboolean('Database', 'GET_DATABASE')
+N_CLASSES = config.getint('Database', 'N_CLASSES')                                  # Number of classes (plants in Database)        
 
 ## MODEL
 
 MODEL_PATH = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))               # Defines location of the model file
-
 
 
 
