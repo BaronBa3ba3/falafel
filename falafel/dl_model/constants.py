@@ -1,5 +1,6 @@
 import os
 import configparser
+import zipfile
 
 
 # Fonction to determine classes
@@ -19,6 +20,27 @@ def get_subfolder_number(directory):
     subdirectories = [item for item in items if os.path.isdir(os.path.join(directory, item))]
     
     return len(subdirectories)
+
+# Fonction that extracts the first 2 layers of a .zip file (main dir + first layer. ex : flowers_5/daisy)
+def extract_first_layer(zip_path, extract_to):
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        # List all files and directories in the zip file
+        file_list = zip_ref.namelist()
+
+        # Extract top-level and second-level items (i.e., up to two directory layers)
+        for item in file_list:
+            # Split the path into its components
+            path_parts = item.rstrip('/').split('/')
+
+            # Check if the item is in the first or second layer
+            if len(path_parts) <= 2:
+                # Create directories if it's a folder
+                if item.endswith('/'):
+                    os.makedirs(os.path.join(extract_to, item), exist_ok=True)
+                # Extract files
+                # else:
+                #     zip_ref.extract(item, extract_to)
 
 
 
@@ -95,8 +117,9 @@ TRAIN_DIR = os.path.join(BASE_DATA_DIR, 'train')                                
 VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                          # Defines the location of the validation folder (validation data)
 
 GET_DATABASE = config.getboolean('Database', 'GET_DATABASE')
-N_CLASSES = get_subfolder_number(BASE_DATA_DIR) if config.getint('Database', 'N_CLASSES') == 0 else config.getint('Database', 'N_CLASSES')   # Number of classes (plants in Database)        
 
+extract_first_layer(DATABASE_ZIP, DATABASE_DIR)
+N_CLASSES = get_subfolder_number(BASE_DATA_DIR) if config.getint('Database', 'N_CLASSES') == 0 else config.getint('Database', 'N_CLASSES')   # Number of classes (plants in Database)        
 CLASS_LABELS = get_subfolder_names(BASE_DATA_DIR)                                   # List of classes (labels)
 
 ## MODEL

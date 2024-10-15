@@ -13,7 +13,8 @@
 
 # ARG PYTHON_VERSION=3.10.12        # WSL version
 # FROM python:${PYTHON_VERSION}-slim as base
-FROM python:latest AS base
+# FROM python:latest AS base        # Latest Version
+FROM python:3.10.12 AS base
 
 
 # Prevents Python from writing pyc files.

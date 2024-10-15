@@ -13,3 +13,5 @@ seaborn
 scikit-learn
 
 # Add other dependencies as needed
+# pkg3>=1.0             # For version greater that 1.0
+# pkg3>=1.0,<=2.0       # For version greater that 1.0 and smaller than 2.0
