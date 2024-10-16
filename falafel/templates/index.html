@@ -75,6 +75,10 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
         @keyframes slowBounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
@@ -90,6 +94,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 40px; /* Adjust based on your design */
+            position: relative;
+
         }
         .progress-bar {
             background-color: #bdc3c7;
@@ -97,6 +104,30 @@
             border-radius: 10px;
             overflow: hidden;
         }
+        #progress-bar {
+            background-color: #3498db;
+            height: 100%;
+            width: 0;
+            border-radius: 5px;
+            transition: width 3s ease;
+        }
+        #progress-container {
+            width: 100%;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            height: 20px;
+            margin-top: 10px;
+            position: relative;
+        }
+        /* #progress-percentage {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #333;
+            line-height: 20px;
+        } */
         .progress {
             background-color: #3498db;
             height: 100%;
@@ -171,6 +202,10 @@
         <div id="loading">
             <div class="spinner"></div>
             <p>Analyzing image...</p>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <!-- <p id="progress-percentage">0%</p> -->
+            </div>
         </div>
         <div id="error"></div>
         <div id="results"></div>
@@ -204,6 +239,17 @@
                         $('#loading').show();
                         $('#error').hide();
                         $('#results').hide();
+                        updateProgress(0);
+                    },
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = Math.round((evt.loaded / evt.total) * 100);
+                                updateProgress(percentComplete);
+                            }
+                        }, false);
+                        return xhr;
                     },
                     success: function(data) {
                         $('#loading').hide();
@@ -217,15 +263,23 @@
                 });
             });
 
+            function updateProgress(percentage) {
+                $('#progress-bar').css('width', percentage + '%');
+                $('#progress-percentage').text(percentage + '%');
+            }
+
+
             function displayResults(results) {
                 var resultsHtml = '<h2>Analysis Results</h2>';
                 results.forEach(function(result) {
                     var percentage = (result.probability * 100).toFixed(2) + '%';
-                    resultsHtml += '<div class="result-item">' +
-                                   '<span>' + result.label + '</span>' +
-                                   '<div class="progress-bar"><div class="progress" style="width: ' + percentage + ';"></div></div>' +
-                                   '<span>' + percentage + '</span>' +
-                                   '</div>';
+                    var backgroundStyle = 'linear-gradient(to right, #3498db ' + percentage + ', #ecf0f1 ' + percentage + ')';
+
+                    resultsHtml += '<div class="result-item" style="background: ' + backgroundStyle + ';">' +
+                                    '<span>' + result.label + '</span>' +
+                                    '<span>' + percentage + '</span>' +
+                                    '</div>';
+
                 });
                 $('#results').html(resultsHtml).show();
 

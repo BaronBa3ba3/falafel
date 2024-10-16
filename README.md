@@ -10,10 +10,15 @@
 ### Testing Server (Client-Side)
 
 
-Website :   `localhost:5000`
+#### Website
 
-CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
-            `curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
+`localhost:5000`
+
+#### CLI
+
+`curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
+
+`curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
 
 
 NGINX listens on port 5000
@@ -26,8 +31,8 @@ WSGI  listens on port 8000
 #### Updating Docker container
 
 `docker build -t ba3ba3/falafel:vX.XX .`
+
 `docker push ba3ba3/falafel:vX.XX`
-docker push ba3ba3/falafel:v1.00
 
 #### Lauching Gunicorn app
 
@@ -44,7 +49,9 @@ docker push ba3ba3/falafel:v1.00
 2. `docker compose up`
 
 
-#### Direct Method
+#### Direct Method (DEPRECATED)
+
+In order to use this, method look back at v3.00
 
 1. Create working directory and enter it (suggestion : `/etc/falafel`)
 
@@ -63,7 +70,8 @@ If it doesn't work, make sure that the script is executable : `chmod a+x /script
 
 ### Application Structure
 
-`
+
+```
 falafel/
 ├── config/
 │   ├── falafel.conf
@@ -91,6 +99,4 @@ falafel/
 ├── Dockerfile
 ├── requirements.txt
 └── docker-compose.yml
-`
-
-
+```
