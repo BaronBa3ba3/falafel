@@ -44,7 +44,7 @@ def main():
 
     model = tf.keras.models.Model(base_model.input, x)
 
-    model.compile(optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.0001), loss = 'binary_crossentropy',metrics = ['acc'])
+    model.compile(optimizer = tf.keras.optimizers.Adam(learning_rate=1e-3), loss = 'binary_crossentropy',metrics = ['acc'])
 
 
 

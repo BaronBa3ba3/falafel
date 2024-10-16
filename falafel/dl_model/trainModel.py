@@ -111,7 +111,24 @@ def main():
 
 #### Loading the Model
 
-	model = tf.keras.models.load_model(constants.MODEL_PATH)
+	## This code allows to retre loading the model if error pops ip (`Permission denied: 'falafel/dl_model/models/model.weights.h5'`)
+	max_retries = 5
+	retry_delay = 2
+
+	for attempt in range(max_retries):
+		try:
+			model = tf.keras.models.load_model(constants.MODEL_PATH)
+			break
+		except PermissionError:
+			if attempt < max_retries - 1:
+				print(f"Permission error, retrying in {retry_delay} seconds...")
+				time.sleep(retry_delay)
+			else:
+				print("Max retries reached. Unable to load the model.")
+				raise
+
+
+	# model = tf.keras.models.load_model(constants.MODEL_PATH)
 
 	print("\nModel Summary:\n")
 	model.summary()
@@ -121,7 +138,9 @@ def main():
 
 	start_time = time.time()
 	
+
 	history = model.fit(train_dataset, validation_data = val_dataset, epochs = EPOCHS)
+
 
 	# history = model.fit(train_generator, validation_data = validation_generator, epochs = EPOCHS) # method that works best
 	# history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = (n_steps_epoch-1), epochs = EPOCHS)
