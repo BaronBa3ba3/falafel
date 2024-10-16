@@ -27,22 +27,49 @@ def load_and_preprocess_image_PIL(image_path, IMG_SHAPE):
     return img_array
 
 
+# 'predictions' argument is expected to be an array. This function analyses multiple predictions of multiple images
+def prediction_analysis_singleCLass(predictions, CLASS_LABELS):
+    predicted_classes_index = np.argmax(predictions, axis=1)
+    
+    predicted_classes = [CLASS_LABELS[i] for i in predicted_classes_index]
+    predicted_values = [predictions[i][predicted_classes_index[i]] for i in range(predicted_classes_index.shape[0])]
 
-def plot_image(i, predictions_array, images):
-  prediction, img = predictions_array[i], images[i]
+    return [predicted_classes, predicted_values]
+
+
+# 'predictions' argument is expected to be an array. This function analyses multiple predictions of multiple images
+def prediction_analysis_doubleCLass(predictions, CLASS_LABELS):
+    
+    top_2_indices = np.argsort(predictions, axis=1)[:, -2:]  # Get the last two indices in sorted order
+
+    # Create a list to store the top 2 predicted classes and their probabilities
+    top_2_classes_with_probs = []
+
+    # Iterate over each prediction and extract the class labels and probabilities
+    for i, indices in enumerate(top_2_indices):
+        
+        indices = reversed(indices) # Reverse indices to have the highest probability first
+        
+        # For each index, get the corresponding class label and probability percentage
+        top_2_classes_probs = [(CLASS_LABELS[idx], predictions[i][idx]) for idx in indices]
+        
+        top_2_classes_with_probs.append(top_2_classes_probs)
+
+
+    # 3 dimension array :       top_2_classes_with_probs = [image1, image2, image3, ...]
+    #                           top_2_classes_with_probs[0] = [[class1, prob1], [class2, prob2]]
+    return top_2_classes_with_probs
+
+
+
+def plot_image(i, predicted_percentage, predicted_class, image):
   plt.grid(False)
   plt.xticks([])
   plt.yticks([])
   
-  plt.imshow(img)
-
-  predicted_label = "dog" if (round(prediction[0]) == 1) else "cat"
-
-  if predicted_label == "cat":
-      prediction = 1 - prediction
+  plt.imshow(image)
   
-  plt.xlabel("{} ({:2.4f})%".format(predicted_label,
-                                100*np.max(prediction)))
+  plt.xlabel("{} ({:2.4f})%".format(predicted_class, 100*(predicted_percentage)))
 
 
 
@@ -53,6 +80,7 @@ def main():
     IMG_SHAPE = constants.IMG_SHAPE
     modelPath = constants.MODEL_PATH
     predict_dir = constants.PREDICTION_DIR
+    CLASS_LABELS = constants.CLASS_LABELS
 
     # Logging
     log_dir = constants.LOG_DIR
@@ -72,13 +100,29 @@ def main():
     
 
 
-
-
-#### Prediction
+#### Prediction (most likely class)
 
     predictions = model.predict(images)
+    print("\nprediction_raw : \n{}".format(predictions))
 
-    print(predictions)
+    
+    prediction_single = prediction_analysis_singleCLass(predictions, CLASS_LABELS)
+
+    print("\npredicted_classes : \n\t{}".format(prediction_single[0]))
+    print("predicted_values : \n\t{}".format(prediction_single[1]))
+
+
+
+#### Prediction (2 most likely classes)
+
+    prediction_double = prediction_analysis_doubleCLass(predictions, CLASS_LABELS)
+
+    # Output the top 2 predicted classes and their probabilities for each image
+    print("\n")
+    for i, classes_probs in enumerate(prediction_double):
+        print(f"Image {i+1}:")
+        for class_label, prob in classes_probs:
+            print(f"  Class: {class_label}, Probability: {prob:.2f}%")
 
 
 
@@ -93,7 +137,7 @@ def main():
     
     for i in range(len(images)) :
         plt.subplot(nRows, nCols, i+1)
-        plot_image(i, predictions, images)
+        plot_image(i, prediction_single[1][i], prediction_single[0][i], images[i])
 
     plt.savefig(os.path.join(log_dir, 'plots', 'Predictions.png'))
 
