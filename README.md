@@ -10,10 +10,15 @@
 ### Testing Server (Client-Side)
 
 
-Website :   `localhost:5000`
+#### Website
 
-CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
-            `curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
+`localhost:5000`
+
+#### CLI
+
+`curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
+
+`curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
 
 
 NGINX listens on port 5000
@@ -26,8 +31,8 @@ WSGI  listens on port 8000
 #### Updating Docker container
 
 `docker build -t ba3ba3/falafel:vX.XX .`
+
 `docker push ba3ba3/falafel:vX.XX`
-docker push ba3ba3/falafel:v1.00
 
 #### Lauching Gunicorn app
 
