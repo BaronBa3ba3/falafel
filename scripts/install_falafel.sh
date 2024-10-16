@@ -85,3 +85,4 @@ echo "Enabling the service to start on boot..."
 sudo systemctl enable $SERVICE_NAME
 
 echo "Service installed and started successfully."
+
