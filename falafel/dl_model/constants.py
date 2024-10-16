@@ -10,6 +10,7 @@ def get_subfolder_names(directory):
         item_path = os.path.join(directory, item)
         if os.path.isdir(item_path):
             subfolder_names.append(item)
+    subfolder_names.sort()
     return subfolder_names
 
 # Fonction to determine number of classes
