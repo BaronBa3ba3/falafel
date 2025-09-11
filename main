@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 ## Preparing the dataset
 
-local_zip = 'data/cats_and_dogs_filtered.zip'
+local_zip = './data/cats_and_dogs_filtered.zip'
 zip_ref = zipfile.ZipFile(local_zip, 'r')
 #zip_ref.extractall('/tmp')
 zip_ref.extractall('C:\Users\bruno\Documents\1_Programming\z-temp')
