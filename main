@@ -15,10 +15,11 @@ import matplotlib.pyplot as plt
 
 local_zip = 'data/cats_and_dogs_filtered.zip'
 zip_ref = zipfile.ZipFile(local_zip, 'r')
-zip_ref.extractall('data')
+#zip_ref.extractall('/tmp')
+zip_ref.extractall('C:\Users\bruno\Documents\1_Programming\z-temp')
 zip_ref.close()
 
-base_dir = 'data/cats_and_dogs_filtered'
+base_dir = '/tmp/cats_and_dogs_filtered'
 train_dir = os.path.join(base_dir, 'train')
 validation_dir = os.path.join(base_dir, 'validation')
 
