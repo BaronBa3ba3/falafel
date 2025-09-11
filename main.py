@@ -1,14 +1,8 @@
 import os
-import tensorflow as tf 
-# from tensorflow.keras.preprocessing.image import ImageDataGenerator 
-# from tensorflow.keras import layers 
-# from tensorflow.keras import Model
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-
 import subprocess
 
 import getDatabase
+import trainModel
 
 
 
@@ -23,8 +17,16 @@ def main():
     # if result.returncode != 0:
     #     print(f"Error: {result.stderr}")
 
+    x = 4
 
-    getDatabase.main()
+
+    print("Getting Database")
+    directories = getDatabase.main()
+
+    print("Training Model")
+    trainModel.main(directories)
+
+    print("Finished")
 
 
 

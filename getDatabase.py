@@ -1,4 +1,4 @@
-import os 
+import os
 import zipfile 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -62,8 +62,10 @@ def main():
 		img = mpimg.imread(img_path)
 		plt.imshow(img)
 
-	plt.show()
+	# plt.show()
 
+
+	return ([train_dir, validation_dir])
 
 
 
