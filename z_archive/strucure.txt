@@ -7,6 +7,9 @@ falafel/
 │   ├── app.py        # Main application code
 │   └── wsgi.py       # WSGI entry point
 │
-├── start_gunicorn.sh  # Script to start Gunicorn
+├── scripts/
+│   ├── install_falafel.sh  # Installation script
+│   └── start_gunicorn.sh   # Script to start Gunicorn
+│
 ├── setup.py           # Setup script for packaging
 └── requirements.txt   # Python dependencies

@@ -5,7 +5,7 @@ SERVICE_NAME=falafel
 SERVICE_FILE=/etc/systemd/system/${SERVICE_NAME}.service
 USERNAME=$(whoami)
 WORKING_DIRECTORY=/path/to/your/application
-START_SCRIPT=${WORKING_DIRECTORY}/start_gunicorn.sh
+START_SCRIPT=${WORKING_DIRECTORY}/scripts/start_gunicorn.sh
 VENV_DIR=${WORKING_DIRECTORY}/venv
 
 # Function to create the start script
@@ -40,6 +40,7 @@ User=$USERNAME
 Group=www-data
 WorkingDirectory=$WORKING_DIRECTORY
 ExecStart=$START_SCRIPT
+# Environment="PATH=$VENV_DIR/bin" # This line might not work
 
 [Install]
 WantedBy=multi-user.target
@@ -84,35 +85,3 @@ echo "Enabling the service to start on boot..."
 sudo systemctl enable $SERVICE_NAME
 
 echo "Service installed and started successfully."
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Install Dependencies
-sudo apt update
-sudo apt install python3 python3-pip python3-venv
-
-
-# Navigate to your application directory
-cd /path/to/your/application
-
-
-# Create and Activate a Virtual Environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install Python Dependencies
-pip install -r requirements.txt
-
-# Install the Application as a Package
-pip install .
-
