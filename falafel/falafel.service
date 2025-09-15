@@ -12,7 +12,7 @@
 
    [Service]
    User=bruno
-   Group=
+   Group=www-data
    WorkingDirectory=/path/to/your/app
    Environment="PATH=/path/to/your/venv/bin"
    ExecStart=/path/to/your/venv/bin/gunicorn --workers 3 --bind unix:flask_app.sock -m 007 app:create_app()
