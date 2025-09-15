@@ -1,57 +1,76 @@
-import os
-import io
-
 from flask import Flask, request, jsonify
-import numpy as np
-
-from tensorflow.python.keras.models import load_model
-from keras.utils import img_to_array
+from keras.models import load_model
+import keras.utils as image
 
 from PIL import Image
+import numpy as np
+import io
+import logging
+from logging.handlers import RotatingFileHandler
+import os
 
+def create_app():
+    app = Flask(__name__)
 
-#### Variables 
+    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
+    MODEL_DIR = "/mnt/c/Users/bruno/Documents/1_Programming/z-temp/Models"
+    MODEL_NAME = "model_CatDog.keras"
 
-IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
-MODEL_DIR = "/mnt/c/Users/bruno/Documents/1_Programming/z-temp/Models"
-MODEL_NAME = "model_CatDog.keras"
+    modelPath = os.path.join(MODEL_DIR, MODEL_NAME)
 
-modelPath = os.path.join(MODEL_DIR, MODEL_NAME)
+    # Logging setup
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+    file_handler = RotatingFileHandler(os.path.join(log_dir, 'app.log'), maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.DEBUG)
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.DEBUG)
 
-print(os.path.abspath(modelPath))
+    # Load the model
+    model = load_model(modelPath)
 
-app = Flask(__name__)
-model = load_model(modelPath)
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        app.logger.info('Received a request to /predict')
+        app.logger.debug(f'Request headers: {request.headers}')
+        app.logger.debug(f'Request files: {request.files}')
 
-def prepare_image(image, target):
-    if image.mode != "RGB":
-        image = image.convert("RGB")
-    image = image.resize(target)
-    image = img_to_array(image)
-    image = np.expand_dims(image, axis=0)       # Add batch dimension
-    return image
+        if 'file' not in request.files:
+            app.logger.error('No file part in the request')
+            return jsonify({'error': 'No file part in the request. Make sure you are sending a file with the key "file" in the request.'}), 400
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    data = {"success": False}
+        file = request.files['file']
+        app.logger.info(f'Received file: {file.filename}')
 
-    if request.method == "POST":
-        if request.files.get("image"):
-            image = request.files["image"].read()
-            image = Image.open(io.BytesIO(image))
-            image = prepare_image(image, target=(IMG_SHAPE, IMG_SHAPE))  # Use your model's input size
+        if file.filename == '':
+            app.logger.error('No file selected for uploading')
+            return jsonify({'error': 'No file selected for uploading'}), 400
 
-            preds = model.predict(image)
-            data["predictions"] = preds.tolist()
-            data["success"] = True
+        try:
+            # Read the file into a byte stream
+            file_bytes = file.read()
+            
+            # Use PIL to open the image
+            img = Image.open(io.BytesIO(file_bytes))
+            
+            # Resize and preprocess the image
+            img = img.resize((224, 224))
+            img_array = image.img_to_array(img)
+            img_array = np.expand_dims(img_array, axis=0)
+            img_array /= 255.
 
-    return jsonify(data)
+            # Make prediction
+            prediction = model.predict(img_array)
+            result = 'Dog' if prediction[0][0] > 0.5 else 'Cat'
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+            app.logger.info(f'Prediction result: {result}')
+            return jsonify({'prediction': result}), 200
 
+        except Exception as e:
+            app.logger.error(f'Error during prediction: {str(e)}')
+            return jsonify({'error': str(e)}), 500
 
-
-## Request :
-#
-# curl -X POST -F "image=@data_test/pig.jpg" http://localhost:5000/predict
+    return app
