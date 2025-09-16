@@ -9,14 +9,15 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
+import falafel.dl_model.constants as constants
+
 def create_app():
     app = Flask(__name__)
 
-    IMG_SHAPE  = 224 # Our training data consists of images with width of 224 pixels and height of 224 pixels
-    MODEL_DIR = "/mnt/c/Users/bruno/Documents/1_Programming/z-temp/Models"
-    MODEL_NAME = "model_CatDog.keras"
-
-    modelPath = os.path.join(MODEL_DIR, MODEL_NAME)
+    IMG_SHAPE  = constants.IMG_SHAPE
+  
+    # modelPath = os.path.join('falafel','dl_model', constants.MODEL_PATH)
+    modelPath = constants.MODEL_PATH_WSL
 
     # Logging setup
     log_dir = "logs"
@@ -57,7 +58,7 @@ def create_app():
             img = Image.open(io.BytesIO(file_bytes))
             
             # Resize and preprocess the image
-            img = img.resize((224, 224))
+            img = img.resize((IMG_SHAPE, IMG_SHAPE))
             img_array = image.img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0)
             img_array /= 255.

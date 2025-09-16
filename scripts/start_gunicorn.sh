@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 source venv/bin/activate
 
 # Start Gunicorn
-exec gunicorn --workers 3 --bind 0.0.0.0:8000 falafel.wsgi:app
+exec gunicorn --workers 3 --bind 0.0.0.0:8000 'falafel.wsgi:create_app()'
 
 
 # To make scritp executable : chmod +x start_gunicorn.sh

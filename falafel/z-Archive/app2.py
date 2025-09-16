@@ -100,5 +100,4 @@ if __name__ == '__main__':
 
 #### Request :
 #
-# curl -X POST -F "file=@data_test/cat.jpg" http://localhost:5000/predict
-
+# curl -X POST -F "file=@falafel/dl_model/prediction_data/cat.jpg" http://localhost:5000/predict

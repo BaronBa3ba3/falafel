@@ -25,4 +25,11 @@ errorlog = '-'
 loglevel = 'info'
 accesslog = '-'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+
+# Application module
+wsgi_app = 'falafel.wsgi:create_app()'
+
+
+
+#### TO RUN APP : gunicorn --config gunicorn.conf.py
    
