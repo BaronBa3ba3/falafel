@@ -11,7 +11,7 @@ def main():
 	DATABASE_DIR = constants.DATABASE_DIR
 	#### Preparing the dataset
 
-	local_zip = constants.DATABASE_DIR_ZIP
+	local_zip = constants.DATABASE_ZIP
 	zip_ref = zipfile.ZipFile(local_zip, 'r')
 	#zip_ref.extractall('/tmp')
 	zip_ref.extractall(DATABASE_DIR)
