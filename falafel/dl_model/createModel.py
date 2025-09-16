@@ -1,7 +1,5 @@
 import tensorflow as tf
 from keras import layers
-from keras import Model
-from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.vgg16 import VGG16
 
 import constants

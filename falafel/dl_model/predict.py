@@ -1,14 +1,9 @@
 import os
 
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 
 import tensorflow as tf
-from keras import layers
-from keras import Model
-from keras.preprocessing.image import ImageDataGenerator
-from keras.applications.vgg16 import VGG16
 
 from keras.utils import load_img, img_to_array
 from PIL import Image
