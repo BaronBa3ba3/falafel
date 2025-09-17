@@ -65,7 +65,7 @@ def main():
 
 	plt.close('all') # remove to show images
 	
-	plt.show()
+	# plt.show()
 
 
 

@@ -1,39 +1,67 @@
 import os
+import configparser
+
+
+#### Importing .conf file
+
+# Create a ConfigParser object
+config = configparser.ConfigParser()
+
+# Read the configuration file
+config.read('config/falafel.conf')
 
 
 
-TRAIN_BOOL = 1                  # 1 if you want to train the model, 0 otherwise
+#### Linking Variables
 
-EPOCHS = 3
-BATCH_SIZE = 20                 # Number of training examples to process before updating our models variables
-IMG_SHAPE  = 224                # Our training data consists of images with width of 224 pixels and height of 224 pixels
+## Model Parameters
 
-DL_MODEL_SUBDIR = "falafel/dl_model"                                                # Defines the location of the model developpement folder (relative to the working dir)
+TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_BOOL')                    # 1 if you want to train the model, 0 otherwise
 
-#### DATABASE
+EPOCHS = config.getint('Model Parameters', 'EPOCHS')
+BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                        # Number of training examples to process before updating our models variables
+IMG_SHAPE  = config.getint('Model Parameters', 'IMG_SHAPE')                         # Our training data consists of images with width of 224 pixels and height of 224 pixels
+N_STEPS_PER_EPOCH = config.getint('Model Parameters', 'N_STEPS_PER_EPOCH')          # Number of steps per epoch. '0' for default value (train_length // batch_size)
 
-DATABASE_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Databases"            # Defines location of the databased folder (contains differents databases)
-# DATABASE_DIR = "/tmp/Databases"
-DATABASE_ZIP = "data/cats_and_dogs_filtered.zip"                                    # Defines location of import of database zip file
-PREDICTION_DIR = "prediction_data"                                                  # Defines location of the prediction folder (images to be predicted)
+MODEL_NAME = config['Model Parameters']['MODEL_NAME']                                          # Defines the name of the model
 
 
+## Paths
 
-BASE_DATA_DIR = os.path.join(DATABASE_DIR, 'cats_and_dogs_filtered')                # Defines the location of the base folder for the working database
+OS_SYSTEM = config['System']['OS']
+
+if OS_SYSTEM in ('Linux', 'Windows', 'WSL'):
+    DATABASE_DIR = config[OS_SYSTEM]['DATABASE_DIR']
+    MODEL_DIR = config[OS_SYSTEM]['MODEL_DIR']
+else:
+    print("System not supported")
+
+
+DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                                # Defines the location of the model developpement folder (relative to the working dir)
+PREDICTION_DIR_NAME = "prediction_data"                                             # Defines name of the prediction folder (images to be predicted)
+PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)                 # Defines the location of the prediction folder (images to be predicted)
+## DATABASE
+
+
+DATABASE_MAME = config['Database']['DATABASE_MAME']
+DATABASE_ZIP = os.path.join(DL_MODEL_SUBDIR, "data", "".join([DATABASE_MAME, ".zip"]))     # Defines location of import of database zip file
+
+
+BASE_DATA_DIR = os.path.join(DATABASE_DIR, DATABASE_MAME)                           # Defines the location of the base folder for the working database
 TRAIN_DIR = os.path.join(BASE_DATA_DIR, 'train')                                    # Defines the location of the training folder (training data)
 VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                          # Defines the location of the validation folder (validation data)
 
-#### MODEL
 
-MODEL_NAME = "model_CatDog"                                                         # Defines the name of the model
+## MODEL
 
-# For Windows
-MODEL_DIR = "C:/Users/bruno/Documents/1_Programming/z-temp/Models"                  # Defines location of the models folder
-MODEL_PATH = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))               # Degines location of the model file
+MODEL_PATH = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))               # Defines location of the model file
 
-## For WSL
-MODEL_DIR_WSL = "/mnt/c/Users/bruno/Documents/1_Programming/z-temp/Models"
-MODEL_PATH_WSL = os.path.join(MODEL_DIR_WSL, "".join([MODEL_NAME, ".keras"]))
 
-## For Linux
-MODEL_DIR_LIN = "/tmp/Models"
+## Logging
+LOG_DIR = config['Logging']['LOG_DIR']
+
+
+
+
+
+
