@@ -10,6 +10,7 @@ from logging.handlers import RotatingFileHandler
 import os
 
 import falafel.dl_model.constants as constants
+import falafel.dl_model.main as dl_model
 
 def create_app():
     app = Flask(__name__)
@@ -31,7 +32,12 @@ def create_app():
     app.logger.setLevel(logging.DEBUG)
 
     # Load the model
+
     model = load_model(modelPath)
+
+
+
+
 
     @app.route('/predict', methods=['POST'])
     def predict():

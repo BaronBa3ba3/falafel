@@ -1,12 +1,18 @@
 import os
+import sys
+sys.path.append(os.path.abspath('falafel/dl_model'))
 
-import constants
-import getDatabase
-import createModel
-import trainModel
-import predict
+import constants as constants
+import getDatabase as getDatabase
+import createModel as createModel
+import trainModel as trainModel
+import predict as predict
 
-
+# import falafel.dl_model.constants as constants
+# import falafel.dl_model.getDatabase as getDatabase
+# import falafel.dl_model.createModel as createModel
+# import falafel.dl_model.trainModel as trainModel
+# import falafel.dl_model.predict as predict
 
 
 

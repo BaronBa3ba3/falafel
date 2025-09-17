@@ -6,10 +6,14 @@ import numpy as np
 
 import tensorflow as tf
 # from tensorflow.python.keras import layers
-from keras import layers
-from keras import Model
-from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.vgg16 import VGG16
+
+# for Windows :
+#from keras.preprocessing.image import ImageDataGenerator
+
+# for WSL : 
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
 
 import constants
 # from __main__ import *
