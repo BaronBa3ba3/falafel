@@ -33,9 +33,16 @@ def create_app():
 
     # Load the model
 
+
+    if os.path.isfile(constants.MODEL_PATH):
+        print('\nModel Found. Loading Model ...\n')
+    else:
+        print('\nModel not Found. Creating Model ...\n')
+        dl_model.main()
+
     model = load_model(modelPath)
 
-
+    print('\n\Running WSGI Server ...\n')
 
 
 

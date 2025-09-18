@@ -26,32 +26,32 @@ def main():
 #### Calling Functions
 
 
-    print("\n\t 1-Getting Database\n")
+    print("\n\t[1/5] - Getting Database\n")
     getDatabase.main()
 
 
 
     if os.path.isfile(constants.MODEL_PATH):
-        print("\n\t 2-Model already Created\n")
+        print("\n\t[2/5] - Model already Created\n")
     else:
-        print("\n\t 2-Creating Model\n")
+        print("\n\t[2/5] - Creating Model\n")
         createModel.main()
 
 
     if (constants.TRAIN_BOOL == 0):
-        print("\n\t 3-Model already trained\n")
+        print("\n\t[3/5] - Model already trained\n")
     else:
-        print("\n\t 3-Training Model\n")
+        print("\n\t[3/5] - Training Model\n")
         trainModel.main()
 
 
 
-    print("\n\t 4-Predicting Images\n")
+    print("\n\t[4/5] - Predicting Images\n")
     predict.main()
 
 
 
-    print("\n\t 5-Finished\n")
+    print("\n\t[5/5] - Finished : Model Creation completed\n")
 
 
 

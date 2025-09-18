@@ -56,7 +56,6 @@ def main():
 
     # Logging
     log_dir = constants.LOG_DIR
-    os.makedirs(os.path.join(log_dir, 'plots'), exist_ok=True)
 
 
 #### Loading the Model
