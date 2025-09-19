@@ -35,10 +35,12 @@ def create_app():
 
 
     if os.path.isfile(constants.MODEL_PATH):
-        if (constants.RST_MODEL_BOOL == 1):
+        # if (constants.RST_MODEL_BOOL == 1):       # This line enters loop. need to find a way to set another variable (reset_model= 0)
+        if (0 == 1):
             print('\nModel Found. Resetting Model ...\n')
             os.remove(modelPath)
             dl_model.main()
+
         elif(constants.TRAIN_BOOL == 1):
             print('\nModel Found. Training Model ...\n')
             dl_model.main()

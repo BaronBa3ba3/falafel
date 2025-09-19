@@ -25,9 +25,9 @@ services:
             - driver: nvidia 
               capabilities: [gpu]
     # command: "sh -c 'echo hello >> /var/falafel/baloutaA'"    # Debug to see if Docker container can write in volume
-    # environment:
-    #   - NVIDIA_VISIBLE_DEVICES=all
-    #   - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
 
   nginx:

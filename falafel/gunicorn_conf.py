@@ -9,11 +9,13 @@ import falafel.dl_model.constants as constants
 #### Creates DL model befor workers are forked. Note that we do not load model here, because each worker should have its own model.
 # def on_starting(server):
 
-#     if os.path.isfile(constants.MODEL_PATH):
-#         print('Model Found. Loading Model ...')
-#     else:
-#         print('Model not Found. Creating Model ...')
-#         falafel.dl_model.main.main()
+#     falafel.dl_model.main.main()
+# 
+    # if os.path.isfile(constants.MODEL_PATH):
+    #     print('Model Found. Loading Model ...')
+    # else:
+    #     print('Model not Found. Creating Model ...')
+    #     falafel.dl_model.main.main()
 
 # Server socket
 bind = "0.0.0.0:8000"
