@@ -40,7 +40,7 @@ def main():
         createModel.main()
 
 
-    if (constants.TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained, if the model was just created (even though TRAIN_BOOL is 0)
+    if (constants.TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
         print("\n\t[3/5] - Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")

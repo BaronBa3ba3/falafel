@@ -27,7 +27,8 @@ else:
 
 ## Model Parameters
 
-TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_BOOL')                    # 1 if you want to train the model, 0 otherwise
+TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_MODEL_BOOL')              # 1 if you want to train the model, 0 otherwise
+RST_MODEL_BOOL = config.getboolean('Model Parameters', 'RST_MODEL_BOOL')            # 1 if you want to reset the model, 0 otherwise
 
 EPOCHS = config.getint('Model Parameters', 'EPOCHS')
 BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                        # Number of training examples to process before updating our models variables
@@ -78,6 +79,8 @@ os.makedirs(os.path.join(LOG_DIR, 'plots'), exist_ok=True)
 if OS_SYSTEM == "Docker":
     os.makedirs(DATABASE_DIR, exist_ok=True)
     os.makedirs(MODEL_DIR, exist_ok=True)
+
+
 
 
 
