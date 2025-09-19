@@ -46,7 +46,7 @@ def create_app():
             print('\nModel Found. Loading Model ...\n')
 
     else:
-        print('\nModel not Found. Creating and TrainingModel ...\n')
+        print('\nModel not Found. Creating and Training Model ...\n')
         dl_model.main()
 
 
