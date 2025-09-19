@@ -32,8 +32,7 @@ def create_app():
     app.logger.setLevel(logging.DEBUG)
 
     # Load the model
-
-
+    
     if os.path.isfile(constants.MODEL_PATH):
         # if (constants.RST_MODEL_BOOL == 1):       # This line enters loop. need to find a way to set another variable (reset_model= 0)
         if (0 == 1):
