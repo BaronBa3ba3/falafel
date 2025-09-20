@@ -53,6 +53,8 @@ else:
 DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                             # Defines the location of the model developpement folder (relative to the working dir)
 PREDICTION_DIR_NAME = "prediction_data"                                             # Defines name of the prediction folder (images to be predicted)
 PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)                 # Defines the location of the prediction folder (images to be predicted)
+
+UPLOAD_FOLDER = 'uploads'                                                           # Defines the name of the folder where uploaded images (from website) are stored
 ## DATABASE
 
 
@@ -74,7 +76,10 @@ MODEL_PATH = os.path.join(MODEL_DIR, "".join([MODEL_NAME, ".keras"]))           
 
 #### Creating directories
 
+os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(os.path.join(LOG_DIR, 'plots'), exist_ok=True)
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 if OS_SYSTEM == "Docker":
     os.makedirs(DATABASE_DIR, exist_ok=True)

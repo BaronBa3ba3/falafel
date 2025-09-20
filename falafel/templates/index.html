@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Analysis App</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #loading {
+            display: none;
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Analysis App</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".png,.jpg,.jpeg" required>
+        <button type="submit">Analyze Image</button>
+    </form>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Analyzing image...</p>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#upload-form').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#loading').show();
+                        $('#results').hide();
+                    },
+                    success: function(data) {
+                        $('#loading').hide();
+                        $('#results').html('<h2>Results:</h2><pre>' + JSON.stringify(data.results, null, 2) + '</pre>').show();
+                    },
+                    error: function() {
+                        $('#loading').hide();
+                        $('#results').html('<p>An error occurred during the analysis.</p>').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
