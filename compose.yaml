@@ -11,7 +11,7 @@ services:
   falafel:
     build:
       context: .
-    image : ba3ba3/falafel
+    image: ba3ba3/falafel
     # volumes:
       # - /etc/falafel:/falafel/config
       # - /var/lib/falafel:/var/falafel
@@ -22,7 +22,7 @@ services:
       resources:
         reservations:
           devices:
-            - driver: nvidia 
+            - driver: nvidia
               capabilities: [gpu]
     # command: "sh -c 'echo hello >> /var/falafel/baloutaA'"    # Debug to see if Docker container can write in volume
     environment:

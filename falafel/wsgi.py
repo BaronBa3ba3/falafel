@@ -1,6 +1,8 @@
-from falafel.app import create_app
+from falafel.app import app, socketio
 
-app = create_app()
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    # app.run(host='0.0.0.0', port=5000)      # For Flask 
+    socketio.run(app)                       # For Flask-SocketIO
+
