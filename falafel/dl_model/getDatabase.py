@@ -3,22 +3,23 @@ import zipfile
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+import constants
+
 
 def main():
 
-
+	DATABASE_DIR = constants.DATABASE_DIR
 	#### Preparing the dataset
 
-	local_zip = 'data/cats_and_dogs_filtered.zip'
+	local_zip = constants.DATABASE_ZIP
 	zip_ref = zipfile.ZipFile(local_zip, 'r')
 	#zip_ref.extractall('/tmp')
-	zip_ref.extractall("C:/Users/bruno/Documents/1_Programming/z-temp")
+	zip_ref.extractall(DATABASE_DIR)
 	zip_ref.close()
 
 	#base_dir = '/tmp/cats_and_dogs_filtered'
-	base_dir = 'C:/Users/bruno/Documents/1_Programming/z-temp/cats_and_dogs_filtered'
-	train_dir = os.path.join(base_dir, 'train')
-	validation_dir = os.path.join(base_dir, 'validation')
+	train_dir = constants.TRAIN_DIR
+	validation_dir = constants.VALIDATION_DIR
 
 	# Directory with our training cat pictures
 	train_cats_dir = os.path.join(train_dir, 'cats')
@@ -42,8 +43,8 @@ def main():
 	fig = plt.gcf()
 	fig.set_size_inches(ncols*4, nrows*4)
 	pic_index = 100
-	train_cat_fnames = os.listdir( train_cats_dir )
-	train_dog_fnames = os.listdir( train_dogs_dir )
+	train_cat_fnames = os.listdir(train_cats_dir)
+	train_dog_fnames = os.listdir(train_dogs_dir)
 
 
 	next_cat_pix = [os.path.join(train_cats_dir, fname) 
@@ -64,7 +65,31 @@ def main():
 
 	plt.close('all') # remove to show images
 	
-	plt.show()
+	# plt.show()
+
+
+
+#### Printing numbers of images in each directory
+
+	num_cats_tr = len(os.listdir(train_cats_dir))
+	num_dogs_tr = len(os.listdir(train_dogs_dir))
+
+	num_cats_val = len(os.listdir(validation_cats_dir))
+	num_dogs_val = len(os.listdir(validation_dogs_dir))
+
+	total_train = num_cats_tr + num_dogs_tr
+	total_val = num_cats_val + num_dogs_val
+
+
+	print('total training cat images:', num_cats_tr)
+	print('total training dog images:', num_dogs_tr)
+
+	print('total validation cat images:', num_cats_val)
+	print('total validation dog images:', num_dogs_val)
+
+	print("-----------------------------------------------")
+	print("Total training images:", total_train)
+	print("Total validation images:", total_val)
 
 
 	return ([train_dir, validation_dir])

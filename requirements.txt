@@ -1,0 +1,12 @@
+flask
+flask-socketio
+gunicorn
+scipy
+tensorflow[and-cuda]
+numpy
+matplotlib
+pillow
+keras
+eventlet
+
+# Add other dependencies as needed
