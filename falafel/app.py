@@ -41,6 +41,13 @@ def create_app():
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
     MAX_CONTENT_LENGTH = constants.MAX_CONTENT_LENGTH
 
+    valueDict = {
+        "acc": ["Training Accuracy", "Accuracy"],
+        "val_acc": ["Validation Accuracy", "Accuracy"],
+        "loss": ["Training Loss", "Loss"],
+        "val_loss": ["Validation Loss", "Loss"],
+    }
+
 
 #### Logging setup
     log_dir = constants.LOG_DIR
@@ -114,6 +121,43 @@ def create_app():
         return results[:5]  # Return top 5 predictions
 
         
+    def plot_history(history_array, value):
+
+        fig = go.Figure()
+
+        epoch_offset = 0
+        for i, history_i in enumerate(history_array):
+            epochs = list(range(epoch_offset, epoch_offset + len(history_i[value])))
+            # acc_fig.add_trace(go.Scatter(x=epochs, y=history_i['acc'], mode='lines+markers', name=f'Run {i+1}'))
+            # epoch_offset += len(history_i['acc'])
+            if i > 0:
+                # Connect the last point of the previous run to the first point of the current run
+                fig.add_trace(go.Scatter(
+                    x=[epoch_offset - 1, epoch_offset],
+                    y=[history_array[i-1][value][-1], history_i[value][0]],
+                    mode='lines',
+                    line=dict(color='gray', dash='dot'),
+                    showlegend=False
+                ))
+
+            fig.add_trace(go.Scatter(
+                x=epochs,
+                y=history_i[value],
+                mode='lines+markers',
+                name=f'Run {i+1}'
+            ))
+
+            epoch_offset += len(history_i[value])
+
+                    # Update layout
+        fig.update_layout(
+            title="".join([valueDict[value][0], " for Multiple Runs"]),
+            xaxis_title='Epoch',
+            yaxis_title=valueDict[value][1],
+            legend_title='Runs'
+        )
+
+        return fig
 
 
 
@@ -206,44 +250,21 @@ def create_app():
                 history_array.append(pickle.load(file_pi))
 
 
-        # Create accuracy plot
-        # acc_fig = go.Figure()
-        # for i in range(nHistories):
-        #     history_current = history_array[i]
-        #     acc_fig.add_trace(go.Scatter(y=history_current['acc'], name="Train Accuracy"))
-        #     acc_fig.add_trace(go.Scatter(y=history_current['val_acc'], name="Validation Accuracy"))
-
-        # acc_fig.update_layout(title="Model Accuracy", xaxis_title="Epoch", yaxis_title="Accuracy")
-
-
-        acc_fig = go.Figure()
-
-        epoch_offset = 0
-        for i, history_i in enumerate(history_array):
-            epochs = list(range(epoch_offset, epoch_offset + len(history_i['acc'])))
-            acc_fig.add_trace(go.Scatter(x=epochs, y=history_i['acc'], mode='lines+markers', name=f'Run {i+1}'))
-            epoch_offset += len(history_i['acc'])
-
-        # Update layout
-        acc_fig.update_layout(
-            title='Training Accuracy for Multiple Runs',
-            xaxis_title='Epoch',
-            yaxis_title='Accuracy',
-            legend_title='Runs'
-        )
-
-
-
+        # Create accuracy plots
+        acc_fig = plot_history(history_array, 'acc')
         acc_plot = json.dumps(acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        # Create loss plot
-        loss_fig = go.Figure()
-        loss_fig.add_trace(go.Scatter(y=history_array[0]['loss'], name="Train Loss"))
-        loss_fig.add_trace(go.Scatter(y=history_array[0]['val_loss'], name="Validation Loss"))
-        loss_fig.update_layout(title="Model Loss", xaxis_title="Epoch", yaxis_title="Loss")
+        val_acc_fig = plot_history(history_array, 'val_acc')
+        val_acc_plot = json.dumps(val_acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        # Create loss plots
+        loss_fig = plot_history(history_array, 'loss')
         loss_plot = json.dumps(loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        return render_template('model.html', model_summary=model_summary, acc_plot=acc_plot, loss_plot=loss_plot)
+        val_loss_fig = plot_history(history_array, 'val_loss')
+        val_loss_plot = json.dumps(val_loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template('model.html', model_summary=model_summary, acc_plot=acc_plot, val_acc_plot=val_acc_plot, loss_plot=loss_plot, val_loss_plot=val_loss_plot)
 
 
     return app
