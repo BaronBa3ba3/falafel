@@ -7,11 +7,18 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+
+
+## To run :
+# docker compose up --build
+
+
+
 services:
   falafel:
     build:
       context: .
-    image: ba3ba3/falafel
+    # image: ba3ba3/falafel:v0.02
     # volumes:
       # - /etc/falafel:/falafel/config
       # - /var/lib/falafel:/var/falafel
@@ -79,4 +86,8 @@ services:
 # secrets:
 #   db-password:
 #     file: db/password.txt
+
+
+
+
 

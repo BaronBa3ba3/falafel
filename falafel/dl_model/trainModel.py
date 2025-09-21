@@ -45,6 +45,9 @@ def main():
 
     # Number of Steps per Epoch
     if (constants.N_STEPS_PER_EPOCH == 0):
+        # n_steps_epoch = int(np.floor(total_train / float(BATCH_SIZE)))
+        # n_steps_epoch = total_train // BATCH_SIZE
+
         n_steps_epoch = int(np.ceil(total_train / float(BATCH_SIZE)))
     else:
         n_steps_epoch = constants.N_STEPS_PER_EPOCH
@@ -66,7 +69,7 @@ def main():
 #### Training and Validation Sets
 
     # Flow training images in batches of 20 using train_datagen generator
-    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE)) #, subset='training')
+    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), shuffle = True) #, subset='training')
 
 
     # Flow validation images in batches of 20 using test_datagen generator
