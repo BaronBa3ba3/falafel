@@ -87,12 +87,18 @@ def create_app():
         time.sleep(3)
 
         predictions = model.predict(img_array)
+        classLabels = 'Dog' if predictions[0][0] > 0.5 else 'Cat'
+        percentage = predictions[0][0] if (classLabels == 'Dog') else 1 - predictions[0][0]
 
-
-        # Convert predictions to a more user-friendly format
-        # This is a placeholder - adjust based on your model's output
+        ## Convert predictions to a more user-friendly format
+        ## This is a placeholder - adjust based on your model's output
+        # classLabels = ["Dog", "Cat"]
+        # results = [
+        #     {"label": f"{classLabels[i]}", "probability": float(p)}
+        #     for i, p in enumerate(predictions[0])
+        # ]
         results = [
-            {"label": f"Class {i}", "probability": float(p)}
+            {"label": f"{classLabels}", "probability": float(percentage)}
             for i, p in enumerate(predictions[0])
         ]
         results.sort(key=lambda x: x['probability'], reverse=True)
