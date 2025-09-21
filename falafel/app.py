@@ -34,7 +34,8 @@ def create_app():
     IMG_SHAPE  = constants.IMG_SHAPE
   
     modelPath = constants.MODEL_PATH
-    history_file = constants.MODEL_HISTORY_PATH
+
+    MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
 
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
@@ -196,21 +197,49 @@ def create_app():
         model_summary = '\n'.join(model_summary)
 
         # Import Model history
-        with open(history_file, "rb") as file_pi:
-            history = pickle.load(file_pi)
+        nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+        history_file_names = (os.listdir(MODEL_HISTORY_DIR))
+        history_array = []
+        for i in range(nHistories):
+            history_file = os.path.join(MODEL_HISTORY_DIR, history_file_names[i])
+            with open(history_file, "rb") as file_pi:
+                history_array.append(pickle.load(file_pi))
 
 
         # Create accuracy plot
+        # acc_fig = go.Figure()
+        # for i in range(nHistories):
+        #     history_current = history_array[i]
+        #     acc_fig.add_trace(go.Scatter(y=history_current['acc'], name="Train Accuracy"))
+        #     acc_fig.add_trace(go.Scatter(y=history_current['val_acc'], name="Validation Accuracy"))
+
+        # acc_fig.update_layout(title="Model Accuracy", xaxis_title="Epoch", yaxis_title="Accuracy")
+
+
         acc_fig = go.Figure()
-        acc_fig.add_trace(go.Scatter(y=history['acc'], name="Train Accuracy"))
-        acc_fig.add_trace(go.Scatter(y=history['val_acc'], name="Validation Accuracy"))
-        acc_fig.update_layout(title="Model Accuracy", xaxis_title="Epoch", yaxis_title="Accuracy")
+
+        epoch_offset = 0
+        for i, history_i in enumerate(history_array):
+            epochs = list(range(epoch_offset, epoch_offset + len(history_i['acc'])))
+            acc_fig.add_trace(go.Scatter(x=epochs, y=history_i['acc'], mode='lines+markers', name=f'Run {i+1}'))
+            epoch_offset += len(history_i['acc'])
+
+        # Update layout
+        acc_fig.update_layout(
+            title='Training Accuracy for Multiple Runs',
+            xaxis_title='Epoch',
+            yaxis_title='Accuracy',
+            legend_title='Runs'
+        )
+
+
+
         acc_plot = json.dumps(acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
 
         # Create loss plot
         loss_fig = go.Figure()
-        loss_fig.add_trace(go.Scatter(y=history['loss'], name="Train Loss"))
-        loss_fig.add_trace(go.Scatter(y=history['val_loss'], name="Validation Loss"))
+        loss_fig.add_trace(go.Scatter(y=history_array[0]['loss'], name="Train Loss"))
+        loss_fig.add_trace(go.Scatter(y=history_array[0]['val_loss'], name="Validation Loss"))
         loss_fig.update_layout(title="Model Loss", xaxis_title="Epoch", yaxis_title="Loss")
         loss_plot = json.dumps(loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
 
