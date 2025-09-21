@@ -5,11 +5,17 @@ import keras.utils as image
 from PIL import Image
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
-import numpy as np
 import io
+import json
 import logging
+import numpy as np
+import pickle
+import plotly
+import plotly.graph_objs as go
 import os
 import time
+
+
 
 import falafel.dl_model.constants as constants
 import falafel.dl_model.main as dl_model
@@ -28,6 +34,7 @@ def create_app():
     IMG_SHAPE  = constants.IMG_SHAPE
   
     modelPath = constants.MODEL_PATH
+    history_file = constants.MODEL_HISTORY_PATH
 
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
@@ -179,6 +186,35 @@ def create_app():
             app.logger.error(f"Error in upload_file: {str(e)}")
             return jsonify({'error': str(e)}), 500
 
+
+    ## Rout for model information
+    @app.route('/model')
+    def model_info():
+        # Get model summary
+        model_summary = []
+        model.summary(print_fn=lambda x: model_summary.append(x))
+        model_summary = '\n'.join(model_summary)
+
+        # Import Model history
+        with open(history_file, "rb") as file_pi:
+            history = pickle.load(file_pi)
+
+
+        # Create accuracy plot
+        acc_fig = go.Figure()
+        acc_fig.add_trace(go.Scatter(y=history['acc'], name="Train Accuracy"))
+        acc_fig.add_trace(go.Scatter(y=history['val_acc'], name="Validation Accuracy"))
+        acc_fig.update_layout(title="Model Accuracy", xaxis_title="Epoch", yaxis_title="Accuracy")
+        acc_plot = json.dumps(acc_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        # Create loss plot
+        loss_fig = go.Figure()
+        loss_fig.add_trace(go.Scatter(y=history['loss'], name="Train Loss"))
+        loss_fig.add_trace(go.Scatter(y=history['val_loss'], name="Validation Loss"))
+        loss_fig.update_layout(title="Model Loss", xaxis_title="Epoch", yaxis_title="Loss")
+        loss_plot = json.dumps(loss_fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+        return render_template('model.html', model_summary=model_summary, acc_plot=acc_plot, loss_plot=loss_plot)
 
 
     return app
