@@ -15,8 +15,6 @@ import plotly.graph_objs as go
 import os
 import time
 
-
-
 import falafel.dl_model.constants as constants
 import falafel.dl_model.main as dl_model
 
@@ -40,6 +38,8 @@ def create_app():
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
     MAX_CONTENT_LENGTH = constants.MAX_CONTENT_LENGTH
+    MAX_TRAIN_RUN = constants.MAX_TRAIN_RUN
+    TRAIN_BOOL = constants.TRAIN_BOOL
 
     valueDict = {
         "acc": ["Training Accuracy", "Accuracy"],
@@ -61,16 +61,20 @@ def create_app():
     app.logger.setLevel(logging.DEBUG)
 
 #### Load the model
-    if os.path.isfile(constants.MODEL_PATH):
+    if os.path.isfile(modelPath):
+        nRuns = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])     # Number of runs the model has been trained
         # if (constants.RST_MODEL_BOOL == 1):       # This line enters loop. need to find a way to set another variable (reset_model= 0)
         if (0 == 1):
             print('\nModel Found. Resetting Model ...\n')
             os.remove(modelPath)
             dl_model.main()
 
-        elif(constants.TRAIN_BOOL == 1):
-            print('\nModel Found. Training Model ...\n')
-            dl_model.main()
+        elif(TRAIN_BOOL == 1):
+            if (nRuns <= MAX_TRAIN_RUN) or (MAX_TRAIN_RUN == 0):
+                print('\nModel Found. Training Model ...\n')
+                dl_model.main()
+            else:
+                print('\nModel Found. Max Train Run reached. Skipping Training ...\n')
         else:
             print('\nModel Found. Loading Model ...\n')
 
@@ -221,7 +225,7 @@ def create_app():
                 return jsonify({'error': 'No selected file'}), 400
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                filepath = os.path.join(constants.UPLOAD_FOLDER, filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
                 app.logger.info(f"File saved to {filepath}")
                 results = analyze_image(filepath)
