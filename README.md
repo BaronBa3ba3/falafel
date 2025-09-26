@@ -25,8 +25,8 @@ This Method is recommended because it allows to set a reverse proxy (NGINX) in f
 `git clone https://github.com/BaronBa3ba3/falafel.git`
 
 3. Edit configs files
-`nano config/falafel.conf`
-`nano config/nginx.conf`
+- `nano config/falafel.conf`
+- `nano config/nginx.conf`
 
 4. Build Docker Containers
 `docker compose up`
