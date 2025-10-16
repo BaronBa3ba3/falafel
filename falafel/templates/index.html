@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Image Analyzer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -20,6 +20,9 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             color: #2c3e50;
@@ -72,9 +75,12 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes slowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .model-link:hover {
+            animation: slowBounce 3s ease-in-out infinite;
         }
         .result-item {
             background-color: #ecf0f1;
@@ -102,11 +108,60 @@
             margin-top: 20px;
             border-radius: 5px;
         }
+
+        .model-link {
+            font-family: 'Special Elite', cursive;
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            color: #3498db;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .model-link-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .model-link:hover {
+            color: #2980b9;
+        }
+        .model-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle 70px at var(--x) var(--y), 
+                                        rgba(52, 152, 219, 0.3) 0%,
+                                        rgba(52, 152, 219, 0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+        .model-link:hover::before {
+            opacity: 1;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>AI Image Analyzer</h1>
+        <a href="/model" class="model-link">Check out our AI Model</a>
         <form id="upload-form" enctype="multipart/form-data">
             <label for="file-input" class="file-label">Choose an image</label>
             <input type="file" id="file-input" name="file" accept=".png,.jpg,.jpeg,.gif,.bmp,.tiff" required>
@@ -184,6 +239,14 @@
                     }, 50);
                 });
             }
+
+            $('.model-link').on('mousemove', function(e) {
+                var rect = e.target.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                $(this).css('--x', x + 'px');
+                $(this).css('--y', y + 'px');
+            });
         });
     </script>
 </body>

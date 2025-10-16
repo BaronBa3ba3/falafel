@@ -3,6 +3,7 @@ import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 
 import tensorflow as tf
 # from tensorflow.python.keras import layers
@@ -27,6 +28,7 @@ def main():
 
     train_dir = constants.TRAIN_DIR
     validation_dir = constants.VALIDATION_DIR
+    MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
 
     EPOCHS = constants.EPOCHS
     BATCH_SIZE = constants.BATCH_SIZE  # Number of training examples to process before updating our models variables
@@ -35,14 +37,17 @@ def main():
 
     total_train = sum([len(files) for r, d, files in os.walk(train_dir)]) # Number of Training Images
 
+
     is_training = True
     total_epochs = EPOCHS
     current_epoch = 0
 
 
-
     # Number of Steps per Epoch
     if (constants.N_STEPS_PER_EPOCH == 0):
+        # n_steps_epoch = int(np.floor(total_train / float(BATCH_SIZE)))
+        # n_steps_epoch = total_train // BATCH_SIZE
+
         n_steps_epoch = int(np.ceil(total_train / float(BATCH_SIZE)))
     else:
         n_steps_epoch = constants.N_STEPS_PER_EPOCH
@@ -61,28 +66,38 @@ def main():
     test_datagen = ImageDataGenerator( rescale = 1.0/255. )
 
 
-
 #### Training and Validation Sets
 
     # Flow training images in batches of 20 using train_datagen generator
-    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='training')
+    train_generator = train_datagen.flow_from_directory(train_dir, batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), shuffle = True) #, subset='training')
+
 
     # Flow validation images in batches of 20 using test_datagen generator
-    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE), subset='validation')
-
+    # subset='validation' is used if splittitng train and val from ImageDataGenerator function
+    validation_generator = test_datagen.flow_from_directory( validation_dir,  batch_size = BATCH_SIZE, class_mode = 'binary', target_size = (IMG_SHAPE, IMG_SHAPE)) #, subset='validation')
 
 
 #### Loading the Model
 
     model = tf.keras.models.load_model(constants.MODEL_PATH)
 
-
-
-
     print("\nModel Summary:\n")
     model.summary()
 
+
+#### Training
+
     history = model.fit(train_generator, validation_data = validation_generator, steps_per_epoch = n_steps_epoch, epochs = EPOCHS)
+
+
+    nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+    history_file = os.path.join(MODEL_HISTORY_DIR, "".join(['history', str(nHistories), '.pkl']))
+    # history_file = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')
+
+
+    with open(history_file, 'wb') as file_pi:
+        pickle.dump(history.history, file_pi)
+
 
 
 

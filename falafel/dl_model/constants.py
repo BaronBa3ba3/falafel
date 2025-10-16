@@ -27,8 +27,9 @@ else:
 
 ## Model Parameters
 
-TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_MODEL_BOOL')              # 1 if you want to train the model, 0 otherwise
-RST_MODEL_BOOL = config.getboolean('Model Parameters', 'RST_MODEL_BOOL')            # 1 if you want to reset the model, 0 otherwise
+TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_MODEL_BOOL')              # '1' if you want to train the model, '0' otherwise
+RST_MODEL_BOOL = config.getboolean('Model Parameters', 'RST_MODEL_BOOL')            # '1' if you want to reset the model, '0' otherwise
+MAX_TRAIN_RUN = config.getboolean('Model Parameters', 'MAX_TRAIN_RUN')              # Maximum number of runs the model will go through. '0' for unlimited.
 
 EPOCHS = config.getint('Model Parameters', 'EPOCHS')
 BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                        # Number of training examples to process before updating our models variables
@@ -48,6 +49,7 @@ if OS_SYSTEM in ('Linux', 'Windows', 'WSL', 'Docker'):
     DATABASE_DIR = config[OS_SYSTEM]['DATABASE_DIR']
     MODEL_DIR = config[OS_SYSTEM]['MODEL_DIR']
     LOG_DIR = config[OS_SYSTEM]['LOG_DIR']
+    UPLOAD_FOLDER = config[OS_SYSTEM]['UPLOAD_FOLDER']                               # Defines the name of the folder where uploaded images (from website) are stored
 else:
     print("ERROR : System not supported")
 
@@ -56,7 +58,10 @@ DL_MODEL_SUBDIR = config['Database']['DL_MODEL_SUBDIR']                         
 PREDICTION_DIR_NAME = "prediction_data"                                             # Defines name of the prediction folder (images to be predicted)
 PREDICTION_DIR = os.path.join(DL_MODEL_SUBDIR, PREDICTION_DIR_NAME)                 # Defines the location of the prediction folder (images to be predicted)
 
-UPLOAD_FOLDER = 'uploads'                                                           # Defines the name of the folder where uploaded images (from website) are stored
+
+MODEL_HISTORY_DIR = os.path.join(MODEL_DIR, 'model_history')                        # Defines the location of the model history folder
+# MODEL_HISTORY_PATH = os.path.join(MODEL_HISTORY_DIR, 'history.pkl')                 # Defines the location of the model history file
+
 ## DATABASE
 
 
@@ -82,6 +87,8 @@ os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs(os.path.join(LOG_DIR, 'plots'), exist_ok=True)
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(MODEL_HISTORY_DIR, exist_ok=True)
+
 
 if OS_SYSTEM == "Docker":
     os.makedirs(DATABASE_DIR, exist_ok=True)
