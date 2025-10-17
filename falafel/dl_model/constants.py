@@ -29,7 +29,7 @@ else:
 
 TRAIN_BOOL = config.getboolean('Model Parameters', 'TRAIN_MODEL_BOOL')              # '1' if you want to train the model, '0' otherwise
 RST_MODEL_BOOL = config.getboolean('Model Parameters', 'RST_MODEL_BOOL')            # '1' if you want to reset the model, '0' otherwise
-MAX_TRAIN_RUN = config.getboolean('Model Parameters', 'MAX_TRAIN_RUN')              # Maximum number of runs the model will go through. '0' for unlimited.
+MAX_TRAIN_RUN = config.getint('Model Parameters', 'MAX_TRAIN_RUN')              # Maximum number of runs the model will go through. '0' for unlimited.
 
 EPOCHS = config.getint('Model Parameters', 'EPOCHS')
 BATCH_SIZE = config.getint('Model Parameters', 'BATCH_SIZE')                        # Number of training examples to process before updating our models variables

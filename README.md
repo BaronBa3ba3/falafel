@@ -1,44 +1,40 @@
 # falafel
 
-Server hosting Neuron Network for plant recognition
+### Neuron Network for plant recognition
+
+
+### Testing Server (Client-Side)
+
+Website :   `localhost:5000`
+
+CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
 
 
 
-## Architecture 
+### Architecture 
 
-`Client -> NGINX -> WSGI -> Flask`
-
-
+`Client -> NGINX -> WSGI -> Flask -> DL_Model`
 
 
-## Steps to install application
 
-### Install with Docker Compose (Recommended)
-This Method is recommended because it allows to set a reverse proxy (NGINX) in front of the GUNICORN server
+### Updating Docker container
+
+`docker build -t ba3ba3/falafel:vX.XX .`
+`docker push ba3ba3/falafel:vX.XX`
 
 
-1. Create directory
-- `mkdir falafel`
-- `cd falafel`
 
-2. Clone Repo from Github
-`git clone https://github.com/BaronBa3ba3/falafel.git`
+### Steps to install application onto Ubuntu Server (Server-Side)
 
-3. Edit configs files
-- `nano config/falafel.conf`
-- `nano config/nginx.conf`
+#### Docker Compose
 
-4. Build Docker Containers
+1. Download compose.yaml
+
+2. 
 `docker compose up`
 
 
-### Install with Docker
-This method is less secure and efficient, as GUNICORN's purpose is not to handle http requests
-
-
-
-
-### Install the application directly onto system (not recommended):
+#### Direct Method
 
 1. Create working directory and enter it (suggestion : `/etc/falafel`)
 
@@ -57,7 +53,7 @@ If it doesn't work, make sure that the script is executable : `chmod a+x /script
 
 
 
-## Ideas to integrate
+### Ideas to integrate
 
 When receives several images of same plant, uses an algorithm (maybe sums all prediction of same plant) that considers the predictions of all images of the same plant and determines most likely result.8
 
