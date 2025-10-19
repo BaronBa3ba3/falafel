@@ -11,6 +11,14 @@ def get_subfolder_names(directory):
             subfolder_names.append(item)
     return subfolder_names
 
+# Fonction to determine number of classes
+def get_subfolder_number(directory):
+    items = os.listdir(directory)
+    
+    # Filter out only the subdirectories. Ignores files
+    subdirectories = [item for item in items if os.path.isdir(os.path.join(directory, item))]
+    
+    return len(subdirectories)
 
 
 
@@ -87,7 +95,7 @@ TRAIN_DIR = os.path.join(BASE_DATA_DIR, 'train')                                
 VALIDATION_DIR = os.path.join(BASE_DATA_DIR, 'validation')                          # Defines the location of the validation folder (validation data)
 
 GET_DATABASE = config.getboolean('Database', 'GET_DATABASE')
-N_CLASSES = config.getint('Database', 'N_CLASSES')                                  # Number of classes (plants in Database)        
+N_CLASSES = get_subfolder_number(BASE_DATA_DIR) if config.getint('Database', 'N_CLASSES') == 0 else config.getint('Database', 'N_CLASSES')   # Number of classes (plants in Database)        
 
 CLASS_LABELS = get_subfolder_names(BASE_DATA_DIR)                                   # List of classes (labels)
 
