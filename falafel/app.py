@@ -99,7 +99,7 @@ def create_app():
 
     # This function analyses a single prediction of one image
     def prediction_analysis_singleCLass(prediction):
-        predicted_class_index = np.argmax(prediction[0], axis=1)
+        predicted_class_index = np.argmax(prediction[0])
         
         predicted_classes = CLASS_LABELS[predicted_class_index]
         predicted_values = prediction[0][predicted_class_index]
@@ -110,24 +110,14 @@ def create_app():
     # This function analyses a single prediction of one image
     def prediction_analysis_doubleCLass(prediction):
         
-        top_2_indices = np.argsort(prediction[0], axis=1)[:, -2:]  # Get the last two indices in sorted order
+        indices = np.argsort(prediction[0])[-2:]  # Get the last two indices in sorted order
+        indices = reversed(indices) # Reverse indices to have the highest probability first
 
-        # Create a list to store the top 2 predicted classes and their probabilities
-        top_2_classes_with_probs = []
-
-        # Iterate over each prediction and extract the class labels and probabilities
-        for indices in top_2_indices:
-            
-            indices = reversed(indices) # Reverse indices to have the highest probability first
-            
-            # For each index, get the corresponding class label and probability percentage
-            top_2_classes_probs = [(CLASS_LABELS[idx], prediction[0][idx]) for idx in indices]
-            
-            top_2_classes_with_probs.append(top_2_classes_probs)
-
-
+        # For each index, get the corresponding class label and probability percentage
+        top_2_classes_probs = [(CLASS_LABELS[idx], prediction[0][idx]) for idx in indices]
+        
         # 2 dimension array :       top_2_classes_with_probs = [[class1, prob1], [class2, prob2]]
-        return top_2_classes_with_probs
+        return top_2_classes_probs
 
 
     def analyze_image(filepath):
@@ -138,9 +128,9 @@ def create_app():
 
         # Simulate longer processing time
         time.sleep(3)
-
         predictions = model.predict(img_array)
-        classLabels, percentage = prediction_analysis_singleCLass(predictions)
+        predictions_double = prediction_analysis_doubleCLass(predictions)
+
         # classLabels = 'Dog' if predictions[0][0] > 0.5 else 'Cat'
         # percentage = predictions[0][0] if (classLabels == 'Dog') else 1 - predictions[0][0]
 
@@ -151,13 +141,14 @@ def create_app():
         #     {"label": f"{classLabels[i]}", "probability": float(p)}
         #     for i, p in enumerate(predictions[0])
         # ]
+
         results = [
-            {"label": f"{classLabels}", "probability": float(percentage)}
-            for i, p in enumerate(predictions[0])
+            {"label": f"{predictions_double[i][0]}", "probability": float(predictions_double[i][1])}
+            for i in range(len(predictions_double))
         ]
         results.sort(key=lambda x: x['probability'], reverse=True)
 
-        return results[:5]  # Return top 5 predictions
+        return results[:2]  # Return top 5 predictions
 
         
     def plot_history(history_array, value):

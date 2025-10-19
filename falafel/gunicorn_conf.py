@@ -71,5 +71,5 @@ wsgi_app = 'falafel.wsgi:create_app()'
 
 
 
-#### TO RUN APP : gunicorn --config gunicorn.conf.py
+#### TO RUN APP : gunicorn --config falafel/gunicorn_conf.py
    

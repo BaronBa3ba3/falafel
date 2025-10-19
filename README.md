@@ -2,25 +2,32 @@
 
 ### Neuron Network for plant recognition
 
-
-### Testing Server (Client-Side)
-
-Website :   `localhost:5000`
-
-CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
-
-
-
 ### Architecture 
 
 `Client -> NGINX -> WSGI -> Flask -> DL_Model`
 
 
+### Testing Server (Client-Side)
 
-### Updating Docker container
+Website :   `localhost:5000`
+
+CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:8000/predict`
+            `curl -X POST -F "file=@XXX.jpg" http://localhost:8000/predict`
+
+
+
+
+
+### Testing Server (Server-Side)
+
+#### Updating Docker container
 
 `docker build -t ba3ba3/falafel:vX.XX .`
 `docker push ba3ba3/falafel:vX.XX`
+
+#### Lauching Gunicorn app
+
+`gunicorn --config falafel/gunicorn_conf.py`
 
 
 
