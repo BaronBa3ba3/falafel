@@ -8,5 +8,8 @@ matplotlib
 pillow
 keras
 plotly
+panda
+seaborn
+scikit-learn
 
 # Add other dependencies as needed
