@@ -20,14 +20,23 @@ def main():
 
 #### Defining Variables
 
-    # os.chdir(r'falafel/dl_model_developpement')     # Change working directory. Or could have contacate all directories in constants.py with the relative dir : MODEL_DEVELOPPEMENT_DIR + MODEL_DIR
-    model_created = 0     # Boolean to check if the model already created.
+    # os.chdir(r'falafel/dl_model_developpement')               # Change working directory. Or could have contacate all directories in constants.py with the relative dir : MODEL_DEVELOPPEMENT_DIR + MODEL_DIR
+    model_created = 0                                           # Boolean to check if the model already created (Do not modify).
+
+    GET_DATABASE = constants.GET_DATABASE
+    TRAIN_BOOL = constants.TRAIN_BOOL
+
+    GET_DATABASE = 0
+    TRAIN_BOOL = 1
 
 #### Calling Functions
 
 
-    print("\n\t[1/5] - Getting Database\n")
-    getDatabase.main()
+    if (GET_DATABASE == 0):                             # Does not unzips database if GET_DATABASE == 0
+        print("\n\t[1/5] - SkippingGetting Database\n")
+    else:
+        print("\n\t[1/5] - Getting Database\n")
+        getDatabase.main()
 
 
 
@@ -40,7 +49,7 @@ def main():
         createModel.main()
 
 
-    if (constants.TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
+    if (TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
         print("\n\t[3/5] - Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")
