@@ -9,16 +9,17 @@
 # https://github.com/docker/awesome-compose
 
 
-## To run :
+## To run build version (falafel : build : context : .) :
 # docker compose up --build
 
-
+## To run iamge version (falafel : image : []):
+# docker compose up
 
 services:
   falafel:
     build:
       context: .
-    # image: ba3ba3/falafel:v0.02
+    # image: ba3ba3/falafel:latest
     # volumes:
       # - /etc/falafel:/falafel/config
       # - /var/lib/falafel:/var/falafel

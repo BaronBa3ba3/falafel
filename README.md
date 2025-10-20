@@ -11,8 +11,8 @@
 
 Website :   `localhost:5000`
 
-CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:8000/predict`
-            `curl -X POST -F "file=@XXX.jpg" http://localhost:8000/predict`
+CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
+            `curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
 
 
 
@@ -22,6 +22,7 @@ CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:8000/predict`
 
 `docker build -t ba3ba3/falafel:vX.XX .`
 `docker push ba3ba3/falafel:vX.XX`
+docker push ba3ba3/falafel:v1.00
 
 #### Lauching Gunicorn app
 
@@ -35,8 +36,7 @@ CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:8000/predict`
 
 1. Download compose.yaml
 
-2. 
-`docker compose up`
+2. `docker compose up`
 
 
 #### Direct Method
