@@ -65,9 +65,6 @@ If it doesn't work, make sure that the script is executable : `chmod a+x /script
 
 ### Application Structure
 
----
-**NOTE**
-
 
 falafel/
 ├── config/
@@ -96,7 +93,3 @@ falafel/
 ├── Dockerfile
 ├── requirements.txt
 └── docker-compose.yml
-
-
----
-
