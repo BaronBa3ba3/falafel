@@ -1,44 +1,50 @@
 # falafel
 
-Server hosting Neuron Network for plant recognition
+### Neuron Network for plant recognition
+
+### Architecture 
+
+`Client -> NGINX -> WSGI -> Flask -> DL_Model`
+
+
+### Testing Server (Client-Side)
+
+
+Website :   `localhost:5000`
+
+CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
+            `curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
+
+
+NGINX listens on port 5000
+WSGI  listens on port 8000
 
 
 
-## Architecture 
+### Testing Server (Server-Side)
 
-`Client -> NGINX -> WSGI -> Flask`
+#### Updating Docker container
 
+`docker build -t ba3ba3/falafel:vX.XX .`
+`docker push ba3ba3/falafel:vX.XX`
+docker push ba3ba3/falafel:v1.00
 
+#### Lauching Gunicorn app
 
-
-## Steps to install application
-
-### Install with Docker Compose (Recommended)
-This Method is recommended because it allows to set a reverse proxy (NGINX) in front of the GUNICORN server
-
-
-1. Create directory
-- `mkdir falafel`
-- `cd falafel`
-
-2. Clone Repo from Github
-`git clone https://github.com/BaronBa3ba3/falafel.git`
-
-3. Edit configs files
-- `nano config/falafel.conf`
-- `nano config/nginx.conf`
-
-4. Build Docker Containers
-`docker compose up`
-
-
-### Install with Docker
-This method is less secure and efficient, as GUNICORN's purpose is not to handle http requests
+`gunicorn --config falafel/gunicorn_conf.py`
 
 
 
+### Steps to install application onto Ubuntu Server (Server-Side)
 
-### Install the application directly onto system (not recommended):
+#### Docker Compose
+
+1. Download compose.yaml
+
+2. `docker compose up`
+
+
+#### Direct Method
 
 1. Create working directory and enter it (suggestion : `/etc/falafel`)
 
@@ -55,9 +61,36 @@ Transfer your application package to the server using scp, rsync, or any other m
 If it doesn't work, make sure that the script is executable : `chmod a+x /scripts/install_falafel.sh`
 
 
+### Application Structure
 
+`
+falafel/
+├── config/
+│   ├── falafel.conf
+│   └── nginx.conf
+|
+├── falafel/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── gunicorn_conf.py
+│   ├── wsgi.py
+│   |
+│   ├── templates/
+│   |   ├── index.html
+│   |   └── model.html
+|   |   
+│   └── dl_model/
+│       ├── __init__.py
+│       ├── main.py
+│       ├── constants.py
+│       ├── getDatabse.py
+│       ├── createModel.py
+│       ├── trainModel.py
+|       └── predict.py
+|
+├── Dockerfile
+├── requirements.txt
+└── docker-compose.yml
+`
 
-## Ideas to integrate
-
-When receives several images of same plant, uses an algorithm (maybe sums all prediction of same plant) that considers the predictions of all images of the same plant and determines most likely result.8
 

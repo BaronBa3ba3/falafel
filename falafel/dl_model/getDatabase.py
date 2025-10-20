@@ -6,10 +6,23 @@ import matplotlib.image as mpimg
 import constants
 
 
+def get_subfolder_names(directory):
+	subfolder_names = []
+	for item in os.listdir(directory):
+		item_path = os.path.join(directory, item)
+		if os.path.isdir(item_path):
+			subfolder_names.append(item)
+	return subfolder_names
+
+
+
 def main():
 
 	DATABASE_DIR = constants.DATABASE_DIR
-	#### Preparing the dataset
+	BASE_DATA_DIR = constants.BASE_DATA_DIR
+	classes = constants.CLASS_LABELS
+
+#### Preparing the dataset
 
 	local_zip = constants.DATABASE_ZIP
 	zip_ref = zipfile.ZipFile(local_zip, 'r')
@@ -18,84 +31,33 @@ def main():
 	zip_ref.close()
 
 	#base_dir = '/tmp/cats_and_dogs_filtered'
-	train_dir = constants.TRAIN_DIR
-	validation_dir = constants.VALIDATION_DIR
-
-	# Directory with our training cat pictures
-	train_cats_dir = os.path.join(train_dir, 'cats')
-
-	# Directory with our training dog pictures
-	train_dogs_dir = os.path.join(train_dir, 'dogs')
-
-	# Directory with our validation cat pictures
-	validation_cats_dir = os.path.join(validation_dir, 'cats')
-
-	# Directory with our validation dog pictures
-	validation_dogs_dir = os.path.join(validation_dir, 'dogs')
-
-
-
-#### Visualizing some of the training images
-
-	nrows = 4
-	ncols = 4
-
-	fig = plt.gcf()
-	fig.set_size_inches(ncols*4, nrows*4)
-	pic_index = 100
-	train_cat_fnames = os.listdir(train_cats_dir)
-	train_dog_fnames = os.listdir(train_dogs_dir)
-
-
-	next_cat_pix = [os.path.join(train_cats_dir, fname) 
-					for fname in train_cat_fnames[ pic_index-8:pic_index] 
-				]
-
-	next_dog_pix = [os.path.join(train_dogs_dir, fname) 
-					for fname in train_dog_fnames[ pic_index-8:pic_index]
-				]
-
-	for i, img_path in enumerate(next_cat_pix+next_dog_pix):
-		# Set up subplot; subplot indices start at 1
-		sp = plt.subplot(nrows, ncols, i + 1)
-		sp.axis('Off') # Don't show axes (or gridlines)
-
-		img = mpimg.imread(img_path)
-		plt.imshow(img)
-
-	plt.close('all') # remove to show images
-	
-	# plt.show()
-
 
 
 #### Printing numbers of images in each directory
 
-	num_cats_tr = len(os.listdir(train_cats_dir))
-	num_dogs_tr = len(os.listdir(train_dogs_dir))
+	numImages = [] 									# Number of images in each class
 
-	num_cats_val = len(os.listdir(validation_cats_dir))
-	num_dogs_val = len(os.listdir(validation_dogs_dir))
+	for flower_type in classes:
+		class_directory = os.path.join(BASE_DATA_DIR, flower_type)    
 
-	total_train = num_cats_tr + num_dogs_tr
-	total_val = num_cats_val + num_dogs_val
+		numElements = len(os.listdir(class_directory))
+		numImages.append(numElements)
 
+		print("***************************")
+		print(f"Flower Type: {flower_type}")
+		print(f"Number of Images: {numElements}")
 
-	print('total training cat images:', num_cats_tr)
-	print('total training dog images:', num_dogs_tr)
-
-	print('total validation cat images:', num_cats_val)
-	print('total validation dog images:', num_dogs_val)
-
-	print("-----------------------------------------------")
-	print("Total training images:", total_train)
-	print("Total validation images:", total_val)
+	print("***************************")
+	print("***************************")
+	print(f"Total Number of Train Images: {int(round(sum(numImages)*(1-constants.VAL_SPLIT),0))}")
+	print(f"Total Number of Valid Images: {int(round(sum(numImages)*(constants.VAL_SPLIT),0))}")
+	print("***************************")
 
 
-	return ([train_dir, validation_dir])
+
 
 
 
 
 if __name__ == "__main__":
-    main()
+	main()

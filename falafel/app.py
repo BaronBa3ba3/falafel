@@ -35,6 +35,8 @@ def create_app():
 
     MODEL_HISTORY_DIR = constants.MODEL_HISTORY_DIR
 
+    CLASS_LABELS = constants.CLASS_LABELS
+
     UPLOAD_FOLDER = constants.UPLOAD_FOLDER
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
     MAX_CONTENT_LENGTH = constants.MAX_CONTENT_LENGTH
@@ -95,6 +97,28 @@ def create_app():
     def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+    # This function analyses a single prediction of one image
+    def prediction_analysis_singleCLass(prediction):
+        predicted_class_index = np.argmax(prediction[0])
+        
+        predicted_classes = CLASS_LABELS[predicted_class_index]
+        predicted_values = prediction[0][predicted_class_index]
+
+        return [predicted_classes, predicted_values]
+
+
+    # This function analyses a single prediction of one image
+    def prediction_analysis_doubleCLass(prediction):
+        
+        indices = np.argsort(prediction[0])[-2:]  # Get the last two indices in sorted order
+        indices = reversed(indices) # Reverse indices to have the highest probability first
+
+        # For each index, get the corresponding class label and probability percentage
+        top_2_classes_probs = [(CLASS_LABELS[idx], prediction[0][idx]) for idx in indices]
+        
+        # 2 dimension array :       top_2_classes_with_probs = [[class1, prob1], [class2, prob2]]
+        return top_2_classes_probs
+
 
     def analyze_image(filepath):
         img = image.load_img(filepath, target_size=(IMG_SHAPE, IMG_SHAPE))
@@ -104,10 +128,11 @@ def create_app():
 
         # Simulate longer processing time
         time.sleep(3)
-
         predictions = model.predict(img_array)
-        classLabels = 'Dog' if predictions[0][0] > 0.5 else 'Cat'
-        percentage = predictions[0][0] if (classLabels == 'Dog') else 1 - predictions[0][0]
+        predictions_double = prediction_analysis_doubleCLass(predictions)
+
+        # classLabels = 'Dog' if predictions[0][0] > 0.5 else 'Cat'
+        # percentage = predictions[0][0] if (classLabels == 'Dog') else 1 - predictions[0][0]
 
         ## Convert predictions to a more user-friendly format
         ## This is a placeholder - adjust based on your model's output
@@ -116,13 +141,14 @@ def create_app():
         #     {"label": f"{classLabels[i]}", "probability": float(p)}
         #     for i, p in enumerate(predictions[0])
         # ]
+
         results = [
-            {"label": f"{classLabels}", "probability": float(percentage)}
-            for i, p in enumerate(predictions[0])
+            {"label": f"{predictions_double[i][0]}", "probability": float(predictions_double[i][1])}
+            for i in range(len(predictions_double))
         ]
         results.sort(key=lambda x: x['probability'], reverse=True)
 
-        return results[:5]  # Return top 5 predictions
+        return results[:2]  # Return top 5 predictions
 
         
     def plot_history(history_array, value):
@@ -167,7 +193,7 @@ def create_app():
 
 #### Routes
 
-    ## Route for /predict. Used from terminals
+    ## Route for /predict. Used from terminals (CLI)
     @app.route('/predict', methods=['POST'])
     def predict():
         app.logger.info('Received a request to /predict')
@@ -200,7 +226,10 @@ def create_app():
 
             # Make prediction
             prediction = model.predict(img_array)
-            result = 'Dog' if prediction[0][0] > 0.5 else 'Cat'
+            # predicted_class_index = np.argmax(prediction[0], axis=1)
+            # result = CLASS_LABELS[predicted_class_index]
+            result = prediction_analysis_singleCLass(prediction)[0]
+            
 
             app.logger.info(f'Prediction result: {result}')
             return jsonify({'prediction': result}), 200

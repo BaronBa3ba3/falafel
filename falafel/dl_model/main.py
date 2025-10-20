@@ -20,19 +20,30 @@ def main():
 
 #### Defining Variables
 
-    # os.chdir(r'falafel/dl_model_developpement')     # Change working directory. Or could have contacate all directories in constants.py with the relative dir : MODEL_DEVELOPPEMENT_DIR + MODEL_DIR
-    model_created = 0     # Boolean to check if the model already created.
+    # os.chdir(r'falafel/dl_model_developpement')               # Change working directory. Or could have contacate all directories in constants.py with the relative dir : MODEL_DEVELOPPEMENT_DIR + MODEL_DIR
+    model_created = 0                                           # Boolean to check if the model already created (Do not modify).
+
+    GET_DATABASE = constants.GET_DATABASE
+    TRAIN_BOOL = constants.TRAIN_BOOL
+    PREDICT_BOOL = 0
+    TRAINING_RUNS = 5
+
+    # GET_DATABASE = 0
+    # TRAIN_BOOL = 0
 
 #### Calling Functions
 
 
-    print("\n\t[1/5] - Getting Database\n")
-    getDatabase.main()
+    if (GET_DATABASE == 0):                             # Does not unzips database if GET_DATABASE == 0
+        print("\n\t[1/5] - Skipping Getting Database\n")
+    else:
+        print("\n\t[1/5] - Getting Database\n")
+        getDatabase.main()
 
 
 
     if os.path.isfile(constants.MODEL_PATH):
-        print("\n\t[2/5] - Model already Created\n")
+        print("\n\t[2/5] - Skipping Creating Model. Model already Created\n")
         model_created = 1
     else:
         print("\n\t[2/5] - Creating Model\n")
@@ -40,17 +51,19 @@ def main():
         createModel.main()
 
 
-    if (constants.TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
-        print("\n\t[3/5] - Model already trained\n")
+    if (TRAIN_BOOL == 0 and model_created == 1):      # Makes sure that the model is trained if the model was just created (even though TRAIN_BOOL is 0)
+        print("\n\t[3/5] - Skipping Training Model.Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")
-        trainModel.main()
+        for _ in range(TRAINING_RUNS): 
+            trainModel.main()
 
 
-
-    print("\n\t[4/5] - Skipping Predicting Images\n")
-    # print("\n\t[4/5] - Predicting Images\n")
-    # predict.main()
+    if (PREDICT_BOOL == 0):
+        print("\n\t[4/5] - Skipping Predicting Images\n")
+    else:
+        print("\n\t[4/5] - Predicting Images\n")
+        predict.main()
 
 
 

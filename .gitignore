@@ -1,3 +1,12 @@
+# Database
+falafel/dl_model/data/*
+!falafel/dl_model/data/flowers_5_trim.zip
+
+# Model
+falafel/dl_model/models/*
+!falafel/dl_model/models/model_history/
+# !falafel/dl_model/models/model_Flowers.keras
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
