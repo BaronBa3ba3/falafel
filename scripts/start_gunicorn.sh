@@ -11,3 +11,4 @@ exec gunicorn --workers 3 --bind 0.0.0.0:8000 'falafel.wsgi:create_app()'
 
 
 # To make scritp executable : chmod +x start_gunicorn.sh
+
