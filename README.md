@@ -44,7 +44,9 @@ docker push ba3ba3/falafel:v1.00
 2. `docker compose up`
 
 
-#### Direct Method
+#### Direct Method (DEPRECATED)
+
+In order to use this, method look back at v3.00
 
 1. Create working directory and enter it (suggestion : `/etc/falafel`)
 
@@ -62,6 +64,9 @@ If it doesn't work, make sure that the script is executable : `chmod a+x /script
 
 
 ### Application Structure
+
+---
+**NOTE**
 
 
 falafel/
@@ -93,4 +98,5 @@ falafel/
 └── docker-compose.yml
 
 
+---
 
