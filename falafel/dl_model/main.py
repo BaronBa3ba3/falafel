@@ -26,6 +26,7 @@ def main():
     GET_DATABASE = constants.GET_DATABASE
     TRAIN_BOOL = constants.TRAIN_BOOL
     PREDICT_BOOL = 0
+    TRAINING_RUNS = 5
 
     # GET_DATABASE = 0
     # TRAIN_BOOL = 0
@@ -54,7 +55,8 @@ def main():
         print("\n\t[3/5] - Skipping Training Model.Model already trained\n")
     else:
         print("\n\t[3/5] - Training Model\n")
-        trainModel.main()
+        for _ in range(TRAINING_RUNS): 
+            trainModel.main()
 
 
     if (PREDICT_BOOL == 0):

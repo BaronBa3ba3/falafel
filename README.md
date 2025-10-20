@@ -9,10 +9,15 @@
 
 ### Testing Server (Client-Side)
 
+
 Website :   `localhost:5000`
 
 CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:5000/predict`
             `curl -X POST -F "file=@XXX.jpg" http://localhost:5000/predict`
+
+
+NGINX listens on port 5000
+WSGI  listens on port 8000
 
 
 
