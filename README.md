@@ -16,8 +16,6 @@ CLI :       `curl -X POST -F "image=@XXX.jpg" http://localhost:8000/predict`
 
 
 
-
-
 ### Testing Server (Server-Side)
 
 #### Updating Docker container
@@ -58,9 +56,36 @@ Transfer your application package to the server using scp, rsync, or any other m
 If it doesn't work, make sure that the script is executable : `chmod a+x /scripts/install_falafel.sh`
 
 
+### Application Structure
 
+`
+falafel/
+├── config/
+│   ├── falafel.conf
+│   └── nginx.conf
+|
+├── falafel/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── gunicorn_conf.py
+│   ├── wsgi.py
+│   |
+│   ├── templates/
+│   |   ├── index.html
+│   |   └── model.html
+|   |   
+│   └── dl_model/
+│       ├── __init__.py
+│       ├── main.py
+│       ├── constants.py
+│       ├── getDatabse.py
+│       ├── createModel.py
+│       ├── trainModel.py
+|       └── predict.py
+|
+├── Dockerfile
+├── requirements.txt
+└── docker-compose.yml
+`
 
-### Ideas to integrate
-
-When receives several images of same plant, uses an algorithm (maybe sums all prediction of same plant) that considers the predictions of all images of the same plant and determines most likely result.8
 
