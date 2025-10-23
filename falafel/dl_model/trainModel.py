@@ -81,8 +81,8 @@ def main():
 		validation_split=VAL_SPLIT,         # 15% of data for validation
 		subset='training',                  # This specifies to use it for validation
 		shuffle=True,                       # Shuffle the dataset
-		seed=123,                           # Ensure repeatable shuffling
-		verbose=True
+		seed=123                           # Ensure repeatable shuffling
+		# verbose=True
 	)
 
 
@@ -95,8 +95,8 @@ def main():
 		validation_split=VAL_SPLIT,
 		subset='validation',
 		shuffle=True,
-		seed=123,
-		verbose=True
+		seed=123
+		# verbose=True
 	)
 
 

@@ -10,3 +10,9 @@ It allows :
 4. prediction.py :   The analyses of few sample files. The result is stored in logs folder in main repo.
 
 The resulting model is stored in the model directory (./model).
+
+
+In order to create a new model, or continue training the older version (dependind on `falafel.conf`) :
+```
+python falafel/dl_model/main.py
+```

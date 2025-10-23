@@ -1,12 +1,12 @@
 flask
 flask-socketio
-gunicorn
+gunicorn==23.0.0
 scipy
-tensorflow[and-cuda]
+tensorflow[and-cuda]==2.14.1
 numpy
 matplotlib
 pillow
-keras
+keras<3.0.0
 plotly
 panda
 seaborn

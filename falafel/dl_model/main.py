@@ -26,7 +26,8 @@ def main():
     GET_DATABASE = constants.GET_DATABASE
     TRAIN_BOOL = constants.TRAIN_BOOL
     PREDICT_BOOL = 0
-    TRAINING_RUNS = 4
+    TRAINING_RUNS = constants.MAX_TRAIN_RUN
+    # TRAINING_RUNS = 1
 
     # GET_DATABASE = 0
     # TRAIN_BOOL = 0
