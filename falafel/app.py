@@ -274,11 +274,29 @@ def create_app():
         model_summary = '\n'.join(model_summary)
 
         # Import Model history
-        nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
-        history_file_names = (os.listdir(MODEL_HISTORY_DIR))
+        # nHistories = len([name for name in os.listdir(MODEL_HISTORY_DIR) if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name))])
+        # history_file_names = (os.listdir(MODEL_HISTORY_DIR))
+        # history_array = []
+        # for i in range(nHistories):
+        #     history_file = os.path.join(MODEL_HISTORY_DIR, history_file_names[i])
+        #     with open(history_file, "rb") as file_pi:
+        #         history_array.append(pickle.load(file_pi))
+
+
+        all_files = [
+            name for name in os.listdir(MODEL_HISTORY_DIR)
+            if os.path.isfile(os.path.join(MODEL_HISTORY_DIR, name)) and name.endswith('.pkl')
+        ]
+
+        # Sort files by the number in the filename: history0.pkl, history1.pkl, ...
+        history_file_names = sorted(
+            all_files,
+            key=lambda name: int(''.join(ch for ch in name if ch.isdigit()))
+        )
+
         history_array = []
-        for i in range(nHistories):
-            history_file = os.path.join(MODEL_HISTORY_DIR, history_file_names[i])
+        for fname in history_file_names:
+            history_file = os.path.join(MODEL_HISTORY_DIR, fname)
             with open(history_file, "rb") as file_pi:
                 history_array.append(pickle.load(file_pi))
 
